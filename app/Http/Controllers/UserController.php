@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
+use App\Models\Department;
 
 class UserController extends Controller
 {
@@ -50,9 +51,11 @@ class UserController extends Controller
     public function create()
     {
         $role = Role::all();
+        $department = Department::all();
         $this->breadcrumb['page'] = 'Thêm mới';
         $data = [
             'roles'         => $role,
+            'departments'   => $department,
         ];
         $this->title = 'Thêm mới';
         return $this->openView("modules.{$this->module}.create", $data);
@@ -72,21 +75,27 @@ class UserController extends Controller
                 'fullname' => 'required',
                 'username' => 'required|unique:App\Models\User,username,NULL,id,deleted_at,NULL',
                 'password' => 'required',
-                'email' => 'required|unique:App\Models\User,email,NULL,id,deleted_at,NULL',
+                'birthday' => 'required',
                 'phone' => 'required|unique:App\Models\User,phone,NULL,id,deleted_at,NULL',
                 'address' => 'required',
+                'citizen_identification' => 'required|unique:App\Models\User,citizen_identification,NULL,id,deleted_at,NULL',
+                'email' => 'required|unique:App\Models\User,email,NULL,id,deleted_at,NULL',
                 'role_id' => 'required',
+                'department_id' => 'required',
             ],
             [
                 'fullname.required' => 'Họ tên không được trống',
                 'username.required' => 'Tên đăng nhập không được trống',
                 'username.unique' => 'Tên đăng nhập đã tồn tại',
                 'password.required' => 'Mật khẩu không được trống',
-                'email.required' => 'Email không được trống',
-                'email.unique' => 'Email đã tồn tại',
+                'birthday.required' => 'Ngày sinh không được trống',
                 'phone.unique' => 'Số điện thoại đã tồn tại',
                 'phone.required' => 'Số điện thoại không được trống',
                 'address.required' => 'Địa chỉ không được trống',
+                'citizen_identification.required' => 'CMND/CCCD không được trống',
+                'citizen_identification.unique' => 'CMND/CCCD đã tồn tại',
+                'email.required' => 'Email không được trống',
+                'email.unique' => 'Email đã tồn tại',
                 'role_id.required' => 'Chưa chọn chức vụ',
             ]
         );
@@ -98,13 +107,16 @@ class UserController extends Controller
         }
         User::create(
             [
-                'fullname' => $request->fullname,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
-                'phone' => preg_replace('/\s+/', '', $request->phone),
-                'address' => $request->address,
-                'role_id' => $request->role_id
+                'fullname'                  => $request->fullname,
+                'username'                  => $request->username,
+                'password'                  => Hash::make($request->password),
+                'birthday'                  => $request->birthday,
+                'phone'                     => preg_replace('/\s+/', '', $request->phone),
+                'address'                   => $request->address,
+                'citizen_identification'    => $request->citizen_identification,
+                'email'                     => $request->email,
+                'role_id'                   => $request->role_id,
+                'department_id'             => $request->role_id
             ]
         );
         $route = "{$this->module}.list";
@@ -140,9 +152,11 @@ class UserController extends Controller
         $role = Role::all();
         $this->breadcrumb['page'] = 'Cập nhật';
         $user = User::find($id);
+        $department = Department::all();
         $data = [
             'user'      => $user,
-            'roles' => $role
+            'roles' => $role,
+            'departments'   => $department,
         ];
         $this->title = 'Cập nhật';
         return $this->openView("modules.{$this->module}.update", $data);
@@ -164,8 +178,10 @@ class UserController extends Controller
                 'username' => "required|unique:App\Models\User,username,{$request->id},id,deleted_at,NULL",
                 'email' => "required|unique:App\Models\User,email,{$request->id},id,deleted_at,NULL",
                 'phone' => "required|unique:App\Models\User,phone,{$request->id},id,deleted_at,NULL",
+                'citizen_identification' => "required|unique:App\Models\User,citizen_identification,{$request->id},id,deleted_at,NULL",
                 'address' => 'required',
                 'role_id' => 'required',
+                'department_id' => 'required',
             ],
             [
                 'fullname.required' => 'Họ tên không được trống',
@@ -175,8 +191,11 @@ class UserController extends Controller
                 'email.unique' => 'Email đã tồn tại',
                 'phone.unique' => 'Số điện thoại đã tồn tại',
                 'phone.required' => 'Số điện thoại không được trống',
+                'citizen_identification.unique' => 'CMND/CCCD đã tồn tại',
+                'citizen_identification.required' => 'CMND/CCCD không được trống',
                 'address.required' => 'Địa chỉ không được trống',
                 'role_id.required' => 'Chưa chọn chức vụ',
+                'department_id.required' => 'Chưa chọn phòng ban',
             ]
         );
         if ($validator->fails()) {
@@ -189,10 +208,13 @@ class UserController extends Controller
         if (!empty($user)) {
             $user->fullname = $request->fullname;
             $user->username = $request->username;
+            $user->birthday = $request->birthday;
+            $user->citizen_identification = $request->citizen_identification;
             $user->email = $request->email;
             $user->phone = preg_replace('/\s+/', '', $request->phone);
             $user->address = $request->address;
             $user->role_id = $request->role_id;
+            $user->department_id = $request->department_id;
             $user->save();
         }
         $route = "{$this->module}.list";

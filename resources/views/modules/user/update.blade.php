@@ -30,15 +30,10 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
-                    <label class="form-label" for="ten">Email<span class="required"> *</span></label>
-                    <input type="email" class="form-control" id="email" name="email"
-                    value="{{$user->email}}"
-                    placeholder="Email..."
-                    data-parsley-type="email"
-                    data-parsley-type-message="Email không đúng định dạng"
-                    data-parsley-required-message="Vui lòng nhập email"
-                    data-parsley-maxlength="191"
-                    data-parsley-maxlength-message="email không thể nhập quá 191 ký tự"
+                    <label class="form-label" for="ten">Ngày sinh<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="birthday" name="birthday"
+                    value="{{$user->birthday}}"
+                    data-parsley-required-message="Vui lòng nhập ngày sinh"
                     required>
                 </div>
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
@@ -62,6 +57,30 @@
                     data-parsley-required-message="Vui lòng nhập địa chỉ"
                     required>
                 </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
+                    <label class="form-label" for="ten">CMND/CCCD<span class="required"> *</span></label>
+                    <input type="text" class="form-control" id="citizen_identification" name="citizen_identification"
+                    value="{{$user->citizen_identification}}"
+                    placeholder="CCCD/CMND..."
+                    data-parsley-required-message="Vui lòng nhập cccd/cmnd"
+                    data-parsley-maxlength="191"
+                    data-parsley-maxlength-message="CCCD/CMND không thể nhập quá 191 ký tự"
+                    required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
+                    <label class="form-label" for="ten">Email<span class="required"> *</span></label>
+                    <input type="email" class="form-control" id="email" name="email"
+                    value="{{$user->email}}"
+                    placeholder="Email..."
+                    data-parsley-type="email"
+                    data-parsley-type-message="Email không đúng định dạng"
+                    data-parsley-required-message="Vui lòng nhập email"
+                    data-parsley-maxlength="191"
+                    data-parsley-maxlength-message="Email không thể nhập quá 191 ký tự"
+                    required>
+                </div>
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="mo-ta">Chức vụ<span class="required"> *</span></label>
                     <select class="form-select "
@@ -78,6 +97,25 @@
                         @endforeach
                     </select>
                     <div id="error-parley-select-cv"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="mo-ta">Phòng ban<span class="required"> *</span></label>
+                    <select class="form-select "
+                    data-parsley-required-message="Vui lòng chọn chức vụ"
+                    data-parsley-errors-container="#error-parley-select-pb"
+                    required
+                    id="department_id" name="department_id">
+                        @foreach($departments as $department)
+                            @if($department->id==$department->role_id)
+                                <option value="{{ $department->id}} " selected>{{ $department->name }}</option>
+                            @else
+                                <option value="{{ $department->id}} ">{{ $department->name}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <div id="error-parley-select-pb"></div>
                 </div>
             </div>
             <div class="d-lg-flex justify-content-end">
@@ -105,31 +143,12 @@
        closeOnSelect : true,
         tags: false, 
     });
-    
+    $("#department_id").select2({
+       placeholder: "Chọn phòng ban",
+       closeOnSelect : true,
+        tags: false, 
+    });
 </script>
-{{-- Validation phone --}}
-<script type="text/javascript">
-    function isSpaceKey(e) {
-        var charCode = (e.which) ? e.which : e.keyCode;
-        if (charCode ==32)
-            return false;
-        return true;
-    }
-   function isNumberKey(e) {
-        var charCode = (e.which) ? e.which : e.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-    }
-    function myFunction() {
-        var x=document.getElementById("phone").value;
-        if(isNaN(x))
-        {
-            document.getElementById("phone").value="";
-        }
-    }
-</script>
-{{-- Xử lý cập nhật --}}
 <script>
     $('#btn-submit-form').click(function() {
         if($('#frm-cap-nhat').parsley().validate()) {
@@ -138,11 +157,13 @@
                 $("input[name='id']").map(function(){ formData.append('id', this.value)}).get();
                 $("input[name='fullname']").map(function(){ formData.append('fullname', this.value)}).get();
                 $("input[name='username']").map(function(){ formData.append('username', this.value)}).get();
-                $("input[name='password']").map(function(){ formData.append('password', this.value)}).get();
-                $("input[name='email']").map(function(){ formData.append('email', this.value)}).get();
+                $("input[name='birthday']").map(function(){ formData.append('birthday', this.value)}).get();
                 $("input[name='phone']").map(function(){ formData.append('phone', this.value)}).get();
                 $("input[name='address']").map(function(){ formData.append('address', this.value)}).get();
+                $("input[name='citizen_identification']").map(function(){ formData.append('citizen_identification', this.value)}).get();
+                $("input[name='email']").map(function(){ formData.append('email', this.value)}).get();
                 $("select[name='role_id']").map(function(){ formData.append('role_id', this.value)}).get();
+                $("select[name='department_id']").map(function(){ formData.append('department_id', this.value)}).get();
 
                 $.ajax({
                     url: "{{ route('user.update') }}",
