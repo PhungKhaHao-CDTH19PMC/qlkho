@@ -57,8 +57,8 @@ class DepartmentController extends Controller
 
             ],
             [
-                'name.unique' => 'Tên quyền đã tồn tại',
-                'name.required' => 'Tên quyền không được trống',
+                'name.unique' => 'Tên phòng ban đã tồn tại',
+                'name.required' => 'Tên phòng ban không được trống',
 
 
             ]
@@ -116,8 +116,8 @@ class DepartmentController extends Controller
 
             ],
             [
-                'name.unique' => 'Tên quyền đã tồn tại',
-                'name.required' => 'Tên quyền không được trống',
+                'name.unique' => 'Tên phòng ban đã tồn tại',
+                'name.required' => 'Tên phòng ban không được trống',
             ]
         );
         if ($validator->fails()) {
