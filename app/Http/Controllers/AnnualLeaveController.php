@@ -28,12 +28,10 @@ class AnnualLeaveController extends Controller
     public function index()
     {
         $user = User::all();
-        $user_fullnames = $user->pluck('fullname')->unique()->sort();
         $annual_leaves  = Annual_leave::all();
         $this->breadcrumb['page'] = 'Danh sách';
         $data = [
-            'user'      => $user,
-            'user_fullname' => $user_fullnames,
+            'users'      => $user,
             'annual_leave' => $annual_leaves
         ];
 

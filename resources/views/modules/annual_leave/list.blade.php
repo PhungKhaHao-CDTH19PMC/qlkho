@@ -7,8 +7,8 @@
                 <div class="col-sm-12 col-md-3">
                     <label class="form-label" for="mo-ta">Tên nhân viên</label>
                     <select multiple="multiple" class="form-control" id="fullname" name="fullname" >
-                        @foreach($user_fullname as $fullname)
-                        <option value="{{ $fullname }}">{{ $fullname }}</option>
+                        @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->fullname }}</option>
                         @endforeach
                     </select>
                 </div>
