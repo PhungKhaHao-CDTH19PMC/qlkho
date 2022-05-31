@@ -12,7 +12,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-sm-12 col-md-3 mt-4">
+                <div class="col-sm-12 col-md-9 mt-4">
                     <div class="d-lg-flex justify-content-end">
                         <a href="{{ route('annual_leave.create') }}" id="btn-them-moi" class="btn btn-primary mt-2 mt-lg-1">
                             <i class="bx bxs-plus-square"></i>Thêm mới
