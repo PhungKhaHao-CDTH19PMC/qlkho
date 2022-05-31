@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Role;
+// use App\Models\Role;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission; 
 use App\Models\Department;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -105,7 +108,7 @@ class UserController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        User::create(
+       $user = User::create(
             [
                 'fullname'                  => $request->fullname,
                 'username'                  => $request->username,
@@ -119,6 +122,11 @@ class UserController extends Controller
                 'department_id'             => $request->role_id
             ]
         );
+        if($user)
+        {
+            $role = Role::find($request->role_id);
+            $user->assignRole($role->name);
+        }
         $route = "{$this->module}.list";
         return response()->json(
             [
@@ -216,6 +224,18 @@ class UserController extends Controller
             $user->role_id = $request->role_id;
             $user->department_id = $request->department_id;
             $user->save();
+        }
+        $listRole = explode(",", $request->role_id);
+        $delete_roles = Role::whereNotIn('id',$listRole)->get();
+        foreach($delete_roles as $delete_role)
+        {
+            $user->removeRole($delete_role->name);
+        }
+
+        foreach($listRole as $id)
+        {
+            $role = Role::find($id);
+            $user->assignRole($role->name);
         }
         $route = "{$this->module}.list";
         return response()->json(
@@ -558,5 +578,15 @@ class UserController extends Controller
             }
         }
         return $filteredObjects;
+    }
+    public function checkRole()
+    {
+        $super_Admin = Auth::user()->hasRole('Super Admin');
+        $permisionDelete = Auth::user()->hasPermissionTo('Xoá người dùng');
+        if($super_Admin || $permisionDelete)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -8,13 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\Role;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    use SoftDeletes;
+    use SoftDeletes,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    public function guardName(){
+        return "web";
+    }
     public function role()
     {
         return $this->belongsTo(Role::class);

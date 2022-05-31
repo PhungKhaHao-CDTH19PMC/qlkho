@@ -28,12 +28,20 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('nguoi-dung')->group(function () {
         Route::name('user.')->group(function () {
+            Route::group(['middleware' => ['role_or_permission:Super Admin|Thêm mới người dùng']], function () { 
+                Route::get('/them-moi', [UserController::class, 'create'])->name('create');
+                Route::post('/them-moi', [UserController::class, 'store'])->name('store');
+            }); 
+
+            Route::group(['middleware' => ['role_or_permission:Super Admin|Cập nhật người dùng']], function () { 
+                Route::get('/cap-nhat/{id}', [UserController::class, 'edit'])->name('edit');
+                Route::post('/cap-nhat', [UserController::class, 'update'])->name('update');
+            }); 
+            Route::group(['middleware' => ['role_or_permission:Super Admin|Xoá người dùng']], function () { 
+                Route::post('/xoa', [UserController::class, 'destroy'])->name('destroy');
+
+            }); 
             Route::get('/', [UserController::class, 'index'])->name('list');
-            Route::get('/them-moi', [UserController::class, 'create'])->name('create');
-            Route::post('/them-moi', [UserController::class, 'store'])->name('store');
-            Route::post('/xoa', [UserController::class, 'destroy'])->name('destroy');
-            Route::get('/cap-nhat/{id}', [UserController::class, 'edit'])->name('edit');
-            Route::post('/cap-nhat', [UserController::class, 'update'])->name('update');
             Route::get('/load-ajax-list-user', [UserController::class, 'loadAjaxListUser'])->name('load_ajax_list_user');
             Route::get('/load-filter-user', [UserController::class, 'loadFilterUser'])->name('load_filter_user');
         });
@@ -72,3 +80,5 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+
+Route::get('/check-role', [UserController::class, 'checkRole'])->name('checkRole');
