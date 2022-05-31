@@ -15,12 +15,15 @@ class SuperAdminSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $user = User::create([
             'username'  => 'superadmin',
             'password'  => Hash::make('123456'),
             'fullname'  => 'Super Admin',
             'email'     => 'superadmin@example.com',
             'role_id'   => 1
         ]);
+        
+        $user->assignRole('Super Admin');
+
     }
 }

@@ -551,48 +551,70 @@
 <script type="text/javascript">
     function deleteRow(a) {
         var id = $(a).data("id");
-        Swal.fire({
+        console.log(id);
+        $.ajax({
+            url:"{{route('checkRole')}}",
+            type:'GET',
+
+        }).done(function (result)
+        {
+            if(result)
+            {
+            Swal.fire({
             title: 'Bạn có chắc muốn xóa?',
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: 'Hủy',
             confirmButtonText: 'Xóa'
-        }).then((result) => {
+              }).then((result) => {
             if (result.value) {
-
-                        $.ajax({
-                                    url: "{{route('user.destroy')}}",
-                                    type: 'post',
-                                    data: {id:id},
-                        }).done(function(res) {
-                            if (res.status == 'success') {
-                                swal.fire({
-                                    title: res.message,
-                                    icon: 'success',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    position: 'center',
-                                    padding: '2em',
-                                    timer: 1500,
-                                })
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                Swal.fire({
-                                    title: res.message,
-                                    icon: 'error',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    position: 'center',
-                                    padding: '2em',
-                                    timer: 1500,
-                                })
-                            }
+                    $.ajax({
+                                url: "{{route('user.destroy')}}",
+                                type: 'post',
+                                data: {id:id},
+                    }).done(function(res) {
+                        if (res.status == 'success') {
+                            swal.fire({
+                                title: res.message,
+                                icon: 'success',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                position: 'center',
+                                padding: '2em',
+                                timer: 1500,
+                            })
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1500);
+                        } else {
+                            Swal.fire({
+                                title: res.message,
+                                icon: 'error',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                position: 'center',
+                                padding: '2em',
+                                timer: 1500,
+                            })
+                        }
                         });
                     }
                 })
+            }
+            else{
+                swal.fire({
+                title:  "Bạn không được sử dụng quyền này!",
+                icon:"error",
+                type: 'error',
+                padding: '2em',
+                showConfirmButton: false,
+                timer: 1500,
+                 })
+            }
+          
+        })
     }
+       
 </script>
 {{-- Xóa hàng loạt --}}
 <script>
@@ -609,6 +631,15 @@
                 var data = table.rows('.selected').data();
                 var formData = new FormData();
                 data.map(function(item){ formData.append('id[]', item.id)});
+                ///
+                $.ajax({
+            url:"{{route('checkRole')}}",
+            type:'GET',
+
+        }).done(function (result)
+        {
+            if(result)
+            {
                 Swal.fire({
                     title: 'Bạn có chắc muốn xóa?',
                     icon: 'warning',
@@ -652,7 +683,20 @@
                             }
                         });
                     }
-                })
+                })//////
+            }
+            else{
+                swal.fire({
+                title:  "Bạn không được sử dụng quyền này!",
+                icon:"error",
+                type: 'error',
+                padding: '2em',
+                showConfirmButton: false,
+                timer: 1500,
+                 })
+            }
+          
+        })
             }
         });
 </script>
