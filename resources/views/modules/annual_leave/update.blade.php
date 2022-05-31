@@ -5,37 +5,55 @@
         <form method="POST" id="frm-cap-nhat" data-parsley-validate="" novalidate>
             @csrf
             <input type="hidden" id="id" name="id" value="{{$annual_leave->id}}">
-            <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
-                <select class="form-select "
-                    data-parsley-required-message="Vui lòng chọn nhân viên"
-                    data-parsley-errors-container="#error-parley-select-nv"
-                    required
-                    id="user_id" name="user_id">
-                    <option value=""></option>
-                        @foreach($users as $user)
-                            @if($user->id==$annual_leave->user_id)
-                                <option value="{{ $user->id}} " selected>{{ $user->fullname }}</option>
-                            @else
-                                <option value="{{ $user->id}} ">{{ $user->fullname}}</option>
-                            @endif
-                        @endforeach
+            <div class="row">
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Ngày bắt đầu<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="start_date" name="start_date"
+                    value="{{$annual_leave->start_date}}"
+                    data-parsley-required-message="Vui lòng nhập ngày bắt đầu"
+                    required>
+                </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Ngày kết thúc<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="finish_date" name="finish_date"
+                    value="{{$annual_leave->finish_date}}"
+                    data-parsley-required-message="Vui lòng nhập ngày kết thúc"
+                    required>
+                    <div id="error-parley-select-fd" 
+                        style="color: #e7515a;
+                        font-size: 13px;
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                        margin: 0.5rem 0 0 0 !important;
+                        list-style: none;"
+                    ></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
+                    <select class="form-select "
+                        data-parsley-required-message="Vui lòng chọn nhân viên"
+                        data-parsley-errors-container="#error-parley-select-nv"
+                        required
+                        id="user_id" name="user_id">
+                        <option value=""></option>
+                            @foreach($users as $user)
+                                @if($user->id==$annual_leave->user_id)
+                                    <option value="{{ $user->id}} " selected>{{ $user->fullname }}</option>
+                                @else
+                                    option value="{{ $user->id}} ">{{ $user->fullname}}</option>
+                                @endif
+                            @endforeach
                     </select>
                     <div id="error-parley-select-cv"></div>
-            </div>
-            <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                <label class="form-label" for="ten">Ngày bắt đầu<span class="required"> *</span></label>
-                <input type="date" class="form-control" id="start_date" name="start_date"
-                value="{{$annual_leave->start_date}}"
-                data-parsley-required-message="Vui lòng nhập ngày bắt đầu"
-                required>
-            </div>
-            <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                <label class="form-label" for="ten">Ngày kết thúc<span class="required"> *</span></label>
-                <input type="date" class="form-control" id="finish_date" name="finish_date"
-                value="{{$annual_leave->finish_date}}"
-                data-parsley-required-message="Vui lòng nhập ngày kết thúc"
-                required>
+                </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Số ngày nghĩ<span class="required"> *</span></label>
+                    <input type="text" class="form-control" id="total_day" name="total_day" 
+                    value="{{$annual_leave->total_day}}"
+                    readonly>
+                </div>
             </div>
             <div class="d-lg-flex justify-content-end">
                 <div class="row mt-3" >
@@ -125,6 +143,53 @@
         tags: false, 
     });
 
+</script>
+<script>
+    $("#finish_date").blur(function(){
+        var ngay_bat_dau  = $("#start_date").val();
+        var ngay_ket_thuc = $("#finish_date").val();
+        var date1 = new Date(ngay_bat_dau);
+        var date2 = new Date(ngay_ket_thuc);
+        var difference = date2.getTime() - date1.getTime();
+        var days = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+        
+        var d = new Date(ngay_ket_thuc);
+        if(!isNaN(d))
+        {
+            if(ngay_bat_dau !='')
+            {
+                if(ngay_bat_dau>ngay_ket_thuc)
+                {
+                    $("#error-parley-select-fd").html("Ngày nghĩ đến không được nhỏ hơn ngày nghĩ từ");
+                    $( "#btn-submit-form" ).prop( "disabled", true );
+                    $("#total_day").val('');
+                }
+                else
+                {
+                    $("#error-parley-select-fd").html("");
+                    $( "#btn-submit-form" ).prop( "disabled", false );
+                    $("#total_day").val(days);
+                }
+            }
+        }
+        else
+        {
+            document.getElementById("finish_date").value="";
+            document.getElementById("error-parley-select-fd").innerHTML=""
+        }
+    });
+</script>
+<script>
+  $("#start_date").blur(function(){
+    var ngay_bat_dau  = $("#start_date").val();
+    var ngay_ket_thuc = $("#finish_date").val("");
+    var d = new Date(ngay_bat_dau);
+    if(isNaN(d))
+    {
+        $("#start_date").val("");
+        $("#total_day").val('');
+    }
+  });
 </script>
 @endsection
 

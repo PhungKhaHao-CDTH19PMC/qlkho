@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Annual_leave;
 use Illuminate\Support\Facades\Validator;
@@ -87,7 +88,7 @@ class AnnualLeaveController extends Controller
                 'start_date'    => $request->start_date,
                 'finish_date'   => $request->finish_date,
                 'user_id'       => $request->user_id,
-                'total_day'     => 1,
+                'total_day'     => Carbon::parse($request->finish_date)->diffInDays(Carbon::parse($request->start_date)) + 1,
             ]
         );
         $route = "{$this->module}.list";
@@ -164,7 +165,7 @@ class AnnualLeaveController extends Controller
             $annual_leave->start_date = $request->start_date;
             $annual_leave->finish_date = $request->finish_date;
             $annual_leave->user_id = $request->user_id;
-            $annual_leave->total_day = 1;
+            $annual_leave->total_day = Carbon::parse($request->finish_date)->diffInDays(Carbon::parse($request->start_date)) + 1;
             $annual_leave->save();
         }
         $route = "{$this->module}.list";
