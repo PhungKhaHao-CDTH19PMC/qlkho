@@ -15,14 +15,20 @@ $menuItems = [
     [
         'title'     => 'Người dùng',
         'icon'      => 'bx-home-circle',
-        'module'    => 'dashboard',
+        'module'    => 'user',
         'link'      => 'user.list'
     ],
     [
         'title'     => 'Phân quyền',
         'icon'      => 'bx-home-circle',
-        'module'    => 'dashboard',
+        'module'    => 'role',
         'link'      => 'role.list'
+    ],
+    [
+        'title'     => 'Phòng ban',
+        'icon'      => 'bx-home-circle',
+        'module'    => 'department',
+        'link'      => 'department.list'
     ],
 ];
 @endphp

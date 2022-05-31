@@ -2,18 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\DistributorController;
-use App\Http\Controllers\DiscountTypeController;
-use App\Http\Controllers\UnitController;
-use App\Http\Controllers\IInvoiceController;
-use App\Http\Controllers\OInvoiceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AccountController;
-
+use App\Http\Controllers\DepartmentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,6 +57,18 @@ Route::middleware('auth')->group(function () {
             Route::post('/cap-nhat/{id}', [AccountController::class, 'update'])->name('update');
             Route::get('/cap-nhat/mat-khau/{id}', [AccountController::class, 'edit_pass'])->name('edit_pass');
             Route::post('/cap-nhat/mat-khau/{id}', [AccountController::class, 'update_pass'])->name('update_pass');
+        });
+    });
+
+    Route::prefix('phong-ban')->group(function () {
+        Route::name('department.')->group(function () {
+            Route::get('/', [DepartmentController::class, 'index'])->name('list');
+            Route::get('/them-moi', [DepartmentController::class, 'create'])->name('create');
+            Route::post('/them-moi', [DepartmentController::class, 'store'])->name('store');
+            Route::post('/xoa', [DepartmentController::class, 'destroy'])->name('destroy');
+            Route::get('/cap-nhat/{id}', [DepartmentController::class, 'edit'])->name('edit');
+            Route::post('/cap-nhat', [DepartmentController::class, 'update'])->name('update');
+            Route::get('/load-ajax-list-department', [DepartmentController::class, 'loadAjaxListRole'])->name('load_ajax_list_department');
         });
     });
 });
