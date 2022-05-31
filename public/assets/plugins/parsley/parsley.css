@@ -1,0 +1,18 @@
+.parsley-errors-list {
+    margin-bottom: 0 !important;
+    padding-left: 0;
+}
+
+.parsley-errors-list li {
+    color: #e7515a;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0.5rem 0 0 0 !important;
+    list-style: none;
+}
+
+input.parsley-error, select.parsley-error, textarea.parsley-error {
+    color: #B94A48;
+    border: 1px solid red;
+}
