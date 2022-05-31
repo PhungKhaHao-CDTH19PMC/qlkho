@@ -17,7 +17,7 @@ class CreateAwardsTable extends Migration
             $table->id();
             $table->integer('user_id')->nullable();
             $table->string('content')->nullable();
-            $table->dateTime('date')->nullable();
+            $table->date('date')->nullable();
             $table->string('type')->nullable();
             $table->bigInteger('salary_bonus')->nullable();
             $table->timestamps();

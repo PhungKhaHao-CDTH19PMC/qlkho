@@ -17,7 +17,7 @@ class CreateAdvanceSalariesTable extends Migration
             $table->id();
             $table->integer('user_id')->nullable();
             $table->double('amount_money')->nullable();
-            $table->dateTime('date')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

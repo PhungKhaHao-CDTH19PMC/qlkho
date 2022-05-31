@@ -17,10 +17,10 @@ class CreateContractsTable extends Migration
 
             $table->id();
             $table->string('code')->nullable();
-            $table->string('user_id')->nullable();
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('finish_date')->nullable();
-            $table->dateTime('signing_date')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('finish_date')->nullable();
+            $table->date('signing_date')->nullable();
             $table->string('content')->nullable();
             $table->string('renewal_number')->nullable();
             $table->integer('salary_factor')->nullable();

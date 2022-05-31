@@ -17,7 +17,7 @@ class CreateAllowancesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->integer('user_id')->nullable();
-            $table->dateTime('date')->nullable();
+            $table->date('date')->nullable();
             $table->string('content')->nullable();
             $table->bigInteger('money_amount')->nullable();
             $table->timestamps();

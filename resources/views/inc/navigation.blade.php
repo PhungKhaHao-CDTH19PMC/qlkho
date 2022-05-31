@@ -30,6 +30,12 @@ $menuItems = [
         'module'    => 'department',
         'link'      => 'department.list'
     ],
+    [
+        'title'     => 'Nghĩ phép',
+        'icon'      => 'bx-building-house',
+        'module'    => 'annual_leave',
+        'link'      => 'annual_leave.list'
+    ],
 ];
 @endphp
 <ul class="metismenu" id="menu">

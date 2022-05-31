@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\AnnualLeaveController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -68,7 +69,19 @@ Route::middleware('auth')->group(function () {
             Route::post('/xoa', [DepartmentController::class, 'destroy'])->name('destroy');
             Route::get('/cap-nhat/{id}', [DepartmentController::class, 'edit'])->name('edit');
             Route::post('/cap-nhat', [DepartmentController::class, 'update'])->name('update');
-            Route::get('/load-ajax-list-department', [DepartmentController::class, 'loadAjaxListRole'])->name('load_ajax_list_department');
+            Route::get('/load-ajax-list-department', [DepartmentController::class, 'loadAjaxListDepartment'])->name('load_ajax_list_department');
+        });
+    });
+
+    Route::prefix('nghi-phep')->group(function () {
+        Route::name('annual_leave.')->group(function () {
+            Route::get('/', [AnnualLeaveController::class, 'index'])->name('list');
+            Route::get('/them-moi', [AnnualLeaveController::class, 'create'])->name('create');
+            Route::post('/them-moi', [AnnualLeaveController::class, 'store'])->name('store');
+            Route::post('/xoa', [AnnualLeaveController::class, 'destroy'])->name('destroy');
+            Route::get('/cap-nhat/{id}', [AnnualLeaveController::class, 'edit'])->name('edit');
+            Route::post('/cap-nhat', [AnnualLeaveController::class, 'update'])->name('update');
+            Route::get('/load-ajax-list-annual-leave', [AnnualLeaveController::class, 'loadAjaxListAnnualLeave'])->name('load_ajax_list_annual_leave');
         });
     });
 });

@@ -3,32 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Department;
+use App\Models\User;
+use App\Models\Annual_leave;
 use Illuminate\Support\Facades\Validator;
 
-class DepartmentController extends Controller
+class AnnualLeaveController extends Controller
 {
     public function __construct()
     {
-        $this->module = 'department';
+        $this->module = 'annual_leave';
         $this->breadcrumb = [
-            'object'    => 'Phòng ban',
+            'object'    => 'Nghĩ phép',
             'page'      => ''
         ];
-        $this->title = 'Phòng ban';
+        $this->title = 'Nghĩ phép';
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        $department = Department::all();
+        $user = User::all();
+        $user_fullnames = $user->pluck('fullname')->unique()->sort();
+        $annual_leaves  = Annual_leave::all();
         $this->breadcrumb['page'] = 'Danh sách';
         $data = [
-            'department' => $department
+            'user'      => $user,
+            'user_fullname' => $user_fullnames,
+            'annual_leave' => $annual_leaves
         ];
+
         return $this->openView("modules.{$this->module}.list", $data);
     }
 
@@ -39,7 +46,13 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::all();
+        $this->breadcrumb['page'] = 'Thêm mới';
+        $data = [
+            'users'         => $user,
+        ];
+        $this->title = 'Thêm mới';
+        return $this->openView("modules.{$this->module}.create", $data);
     }
 
     /**
@@ -53,14 +66,14 @@ class DepartmentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:App\Models\Department,name',
-
+                'start_date' => 'required',
+                'finish_date' => 'required',
+                'user_id' => 'required',
             ],
             [
-                'name.unique' => 'Tên phòng ban đã tồn tại',
-                'name.required' => 'Tên phòng ban không được trống',
-
-
+                'start_date.required' => 'Ngày nghĩ từ nghĩ không được trống',
+                'finish_date.required' => 'Ngày nghĩ đến nghĩ không được trống',
+                'user_id.required'    => 'Nhân viên không được trống',
             ]
         );
         if ($validator->fails()) {
@@ -69,13 +82,23 @@ class DepartmentController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        $newDepartment = Department::create([
-            'name' => $request->name
-        ]);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Thêm thành công',
-        ], 200);
+        Annual_leave::create(
+            [
+                'start_date'    => $request->start_date,
+                'finish_date'   => $request->finish_date,
+                'user_id'       => $request->user_id,
+                'total_day'     => 1,
+            ]
+        );
+        $route = "{$this->module}.list";
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'Thêm thành công',
+                'redirect' => route($route)
+            ],
+            200
+        );
     }
 
     /**
@@ -97,7 +120,15 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::all();
+        $annual_leave = Annual_leave::find($id);
+        $this->breadcrumb['page'] = 'Cập nhật';
+        $data = [
+            'users'         => $user,
+            'annual_leave'  => $annual_leave
+        ];
+        $this->title = 'Cập nhật';
+        return $this->openView("modules.{$this->module}.update", $data);
     }
 
     /**
@@ -112,12 +143,14 @@ class DepartmentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:App\Models\Department,name,' . $request->id,
-
+                'start_date' => 'required',
+                'finish_date' => 'required',
+                'user_id' => 'required',
             ],
             [
-                'name.unique' => 'Tên phòng ban đã tồn tại',
-                'name.required' => 'Tên phòng ban không được trống',
+                'start_date.required' => 'Ngày nghĩ từ nghĩ không được trống',
+                'finish_date.required' => 'Ngày nghĩ đến nghĩ không được trống',
+                'user_id.required'    => 'Nhân viên không được trống',
             ]
         );
         if ($validator->fails()) {
@@ -126,20 +159,23 @@ class DepartmentController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        $department = Department::find($request->id);
-        if (!empty($department)) {
-            $department->name = $request->name;
-            $department->save();
-            return response()->json([
+        $annual_leave = Annual_leave::find($request->id);
+        if (!empty($annual_leave)) {
+            $annual_leave->start_date = $request->start_date;
+            $annual_leave->finish_date = $request->finish_date;
+            $annual_leave->user_id = $request->user_id;
+            $annual_leave->total_day = 1;
+            $annual_leave->save();
+        }
+        $route = "{$this->module}.list";
+        return response()->json(
+            [
                 'status' => 'success',
                 'message' => 'Cập nhật thành công',
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Cập nhật thất bại',
-            ], 200);
-        }
+                'redirect' => route($route)
+            ],
+            200
+        );
     }
 
     /**
@@ -151,7 +187,7 @@ class DepartmentController extends Controller
     public function destroy(Request $request)
     {
         try {
-            Department::destroy($request->id);
+            Annual_leave::destroy($request->id);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đã xoá dữ liệu',
@@ -173,10 +209,10 @@ class DepartmentController extends Controller
                 }
             }
         }
-
         return $filter;
     }
-    public function loadAjaxListDepartment(Request $request)
+
+    public function loadAjaxListAnnualLeave(Request $request)
     {
         $draw            = $request->get('draw');
         $start           = $request->get("start");
@@ -189,12 +225,14 @@ class DepartmentController extends Controller
         $columnName      = $columnName_arr[$columnIndex]['name']; // Column name
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue     = trim($search_arr['value']); // Search value
-        $filter['name'] =  $searchValue;
+        $filter['search'] =  $searchValue;
         $filter = $this->customFilterAjax($filter, $columnName_arr);
         // Total records
-        $totalRecords  = Department::count();
-        $totalRecordswithFilter = Department::queryData($filter)->distinct()->count();
-        $department = Department::select(['departments.*'])
+        $totalRecords  = Annual_leave::count();
+        $totalRecordswithFilter = Annual_leave::queryData($filter)->distinct()->count();
+        $annual_leave = Annual_leave::select(['annual_leaves.*'])
+            ->leftjoin('users', 'users.id', '=', 'annual_leaves.user_id')
+            ->with(['user'])
             ->queryData($filter)
             ->orderBy($columnName, $columnSortOrder)->distinct()->skip($start)->take($rowperpage)->get();
 
@@ -202,7 +240,7 @@ class DepartmentController extends Controller
             "draw"                 => intval($draw),
             "iTotalRecords"        => $totalRecords,
             "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData"               => $department,
+            "aaData"               => $annual_leave,
             "filter"               => $filter,
         ];
         echo json_encode($response);

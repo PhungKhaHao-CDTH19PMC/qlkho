@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInsurrancesTable extends Migration
+class CreateAnnualLeavesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateInsurrancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('insurrances', function (Blueprint $table) {
+        Schema::create('annual_leaves', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
             $table->integer('user_id')->nullable();
-            $table->date('issue_date')->nullable();
-            $table->string('issue_place')->nullable();
-            $table->string('examination_address')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('finish_date')->nullable();
+            $table->bigInteger('total_day')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +31,6 @@ class CreateInsurrancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insurrances');
+        Schema::dropIfExists('annual_leaves');
     }
 }
