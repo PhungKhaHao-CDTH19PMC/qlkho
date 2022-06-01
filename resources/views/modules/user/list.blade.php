@@ -1,5 +1,7 @@
 @extends('master')
 @section('page-content')
+@include('inc.sweetalert')
+
 <div class="card">
     <div class="card-body">
             <div class="ms-auto">
