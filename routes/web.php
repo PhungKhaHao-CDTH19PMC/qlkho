@@ -7,6 +7,11 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AnnualLeaveController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SalaryController
+;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -90,6 +95,29 @@ Route::middleware('auth')->group(function () {
             Route::get('/cap-nhat/{id}', [AnnualLeaveController::class, 'edit'])->name('edit');
             Route::post('/cap-nhat', [AnnualLeaveController::class, 'update'])->name('update');
             Route::get('/load-ajax-list-annual-leave', [AnnualLeaveController::class, 'loadAjaxListAnnualLeave'])->name('load_ajax_list_annual_leave');
+        });
+    });
+    Route::prefix('hop-dong')->group(function () {
+        Route::name('contracts.')->group(function () {
+            Route::get('/', [ContactController::class, 'index'])->name('list');
+            Route::get('/them-moi', [ContactController::class, 'create'])->name('create');
+            Route::post('/them-moi', [ContactController::class, 'store'])->name('store');
+            Route::post('/xoa', [ContactController::class, 'destroy'])->name('destroy');
+            Route::get('/cap-nhat/{id}', [ContactController::class, 'edit'])->name('edit');
+            Route::post('/cap-nhat', [ContactController::class, 'update'])->name('update');
+            Route::get('/load-ajax-list-annual-leave', [ContactController::class, 'loadAjaxListContract'])->name('load_ajax_list_contracts');
+        });
+    });
+
+    Route::prefix('luong')->group(function () {
+        Route::name('salary.')->group(function () {
+            Route::get('/', [SalaryController::class, 'index'])->name('list');
+            Route::get('/them-moi', [SalaryController::class, 'create'])->name('create');
+            Route::post('/them-moi', [SalaryController::class, 'store'])->name('store');
+            Route::post('/xoa', [SalaryController::class, 'destroy'])->name('destroy');
+            Route::get('/cap-nhat/{id}', [SalaryController::class, 'edit'])->name('edit');
+            Route::post('/cap-nhat', [SalaryController::class, 'update'])->name('update');
+            Route::get('/load-ajax-list-annual-leave', [SalaryController::class, 'loadAjaxListSalary'])->name('load_ajax_list_salary');
         });
     });
 });

@@ -9,8 +9,8 @@ $menuItems = [
     [
         'title'     => 'Hợp đồng',
         'icon'      => 'bx-home-circle',
-        'module'    => 'dashboard',
-        'link'      => 'dashboard'
+        'module'    => 'contracts',
+        'link'      => 'contracts.list'
     ],
     [
         'title'     => 'Người dùng',
@@ -35,6 +35,12 @@ $menuItems = [
         'icon'      => 'bx-building-house',
         'module'    => 'annual_leave',
         'link'      => 'annual_leave.list'
+    ],
+    [
+        'title'     => 'Loại lương',
+        'icon'      => 'bx-home-circle',
+        'module'    => 'salary',
+        'link'      => 'salary.list'
     ],
 ];
 @endphp
