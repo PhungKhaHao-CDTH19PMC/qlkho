@@ -16,6 +16,7 @@ class CreateTimesheetsTable extends Migration
         Schema::create('timesheets', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
+            $table->date('date')->nullable();
             $table->date('in_hour')->nullable();
             $table->date('out_hour')->nullable();
             $table->string('content')->nullable();
