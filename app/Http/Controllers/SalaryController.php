@@ -63,11 +63,11 @@ class SalaryController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required',
+                'name_create' => 'required',
                 'salary_payable' => 'required',
             ],
             [
-                'name.required' => 'Tên lương không được bỏ trống',
+                'name_create.required' => 'Tên lương không được bỏ trống',
                 'salary_payable.required' => 'Lương cơ bản không được bỏ trống',
             ]
         );
@@ -78,7 +78,7 @@ class SalaryController extends Controller
             ], 200);
         }
         $newContract = Salary::create([
-            'name' =>$request->name,
+            'name' =>$request->name_create,
             'salary_payable' =>$request->salary_payable,
         ]);
         $route = "{$this->module}.list";
@@ -135,11 +135,11 @@ class SalaryController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required',
+                'name_update' => 'required',
                 'salary_payable' => 'required',
             ],
             [
-                'name.required' => 'Tên lương không được bỏ trống',
+                'name_update.required' => 'Tên lương không được bỏ trống',
                 'salary_payable.required' => 'Lương cơ bản không được bỏ trống',
             ]
         );
@@ -150,7 +150,7 @@ class SalaryController extends Controller
             ], 200);
         }
         $update = Salary::find($request->id);
-        $update->name = $request->name;
+        $update->name = $request->name_update;
         $update-> salary_payable = $request->salary_payable;
         $update->save();
         if (!empty($update)) {

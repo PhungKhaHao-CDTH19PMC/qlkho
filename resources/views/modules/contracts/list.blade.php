@@ -87,22 +87,14 @@
         },
         onClose: function () {
             var filterFullname = JSON.stringify($("#fullname").val())
-            var filterPhone = JSON.stringify($("#phone").val())
-            var filterRole = JSON.stringify($("#role_id").val())
             table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
         },
 
         onClear: function () {
             var filterFullname = JSON.stringify($("#fullname").val())
-            var filterPhone = JSON.stringify($("#phone").val())
-            var filterRole = JSON.stringify($("#role_id").val())
             table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
         }

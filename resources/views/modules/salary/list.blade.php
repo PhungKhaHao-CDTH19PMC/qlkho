@@ -1,5 +1,7 @@
 @extends('master')
 @section('page-content')
+@include('modules.salary.create')
+@include('modules.salary.update')
 <div class="card">
     <div class="card-body">
             <div class="ms-auto">
@@ -14,7 +16,7 @@
                 </div>
                 <div class="col-sm-12 col-md-9 mt-4">
                     <div class="d-lg-flex justify-content-end">
-                        <a href="{{ route('salary.create') }}" id="btn-them-moi" class="btn btn-primary mt-2 mt-lg-1">
+                        <a id="btn-them-moi" class="btn btn-primary mt-2 mt-lg-1">
                             <i class="bx bxs-plus-square"></i>Thêm mới
                         </a>
                     </div>
@@ -158,7 +160,7 @@
                         render: function(data,type, columns){
                              var url = "./luong/cap-nhat/"+ columns.id;
                             return '<div class="d-flex order-actions">'
-                                +'<a data-toggle="tooltip" data-placement="right" title="Cập nhật" href="'+ url +'" class="btn-edit"><i class="bx bxs-edit"></i></a>'
+                                +'<a data-toggle="tooltip" data-placement="right" title="Cập nhật" onclick="updateRow(this)" data-target="#update-modal" data-toggle="modal" data-id="'+columns.id+'" data-name="'+columns.name+'"  data-salary_payable="'+columns.salary_payable+'" class="btn-edit"><i class="bx bxs-edit"></i></a>'
                                 +'<a data-toggle="tooltip" data-placement="right" title="Xoá" onclick="deleteRow(this)" data-id="'+columns.id+'" href="javascript:;" class="text-danger ms-3 btn-del"><i class="bx bxs-trash"></i></a>'
                                 +'</div>'
                         }
@@ -283,7 +285,7 @@
 </script>
 <script type="text/javascript">
     $("#name").multipleSelect({
-        placeholder: "Chọn tên nhân viên",
+        placeholder: "Chọn tên lương",
         filter: true,
         showClear: true,
         //placeholder: 'Chọn mã hợp đồng',
@@ -304,23 +306,15 @@
             return 'Không tìm thấy kết quả'
         },
         onClose: function () {
-            var filterFullname = JSON.stringify($("#name").val())
-            var filterPhone = JSON.stringify($("#phone").val())
-            var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            var filterName = JSON.stringify($("#name").val())
+            table.columns(2).search(filterName).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
         },
 
         onClear: function () {
-            var filterFullname = JSON.stringify($("#fullname").val())
-            var filterPhone = JSON.stringify($("#phone").val())
-            var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            var filterName = JSON.stringify($("#name").val())
+            table.columns(2).search(filterName).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
         }
@@ -330,5 +324,116 @@
        allowClear: true,
        minimumResultsForSearch: -1
     });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var modal = $("#create-modal");
+
+        $('#btn-them-moi').click(function() {
+            modal.modal('show')
+        });
+
+        // Modal shown
+        modal.on('shown.bs.modal', function() {
+            document.getElementById("name_create").focus();
+            document.getElementById("name_create").value = "";
+            document.getElementById("salary_payable").value = "";
+        });
+
+        // Modal hidden
+        modal.on('hidden.bs.modal', function() {
+            $('#frm-them-moi').parsley().reset();
+
+        });
+
+        $('#btn-save-modal').click(function() {
+            if($('#frm-them-moi').parsley().validate()) {
+               $.ajax({
+                    url: "{{ route('salary.store') }}",
+                    type: 'POST',
+                    data: $('form.create_form').serialize(),
+                }).done(function(res) {
+                    if (res.status == 'success') {
+                        swal.fire({
+                            title: res.message,
+                            icon: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            position: 'center',
+                            padding: '2em',
+                            timer: 1500,
+                        })
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Swal.fire({
+                            title: res.message,
+                            icon: res.status,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            position: 'center',
+                            padding: '2em',
+                            timer: 1500,
+                        })
+                    }
+                });
+            }
+        });
+        $('#btn-update-modal').click(function(e) {
+            if($('#frm-cap-nhat').parsley().validate()) {
+                $.ajax({
+                    url: "{{ route('salary.update') }}",
+                    type: 'POST',
+                    data: $('form.update_form').serialize(),
+                }).done(function(res) {
+                    if (res.status == 'success') {
+                        swal.fire({
+                            title: res.message,
+                            icon: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            position: 'center',
+                            padding: '2em',
+                            timer: 1500,
+                        })
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Swal.fire({
+                            title: res.message,
+                            icon: res.status,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            position: 'center',
+                            padding: '2em',
+                            timer: 1500,
+                        })
+                    }
+                });
+            }
+        })
+    });
+</script>
+<script type="text/javascript">
+    function updateRow(a) {
+        var id = $(a).data("id");
+        var name = $(a).data("name");
+        var salary_payable = $(a).data("salary_payable");
+        console.log(name)
+        var modal = $("#update-modal");
+        modal.modal('show')
+        modal.on('shown.bs.modal', function(e) {
+             $(e.currentTarget).find('input[name="id"]').val(id);
+             $(e.currentTarget).find('input[name="name_update"]').val(name);
+             $(e.currentTarget).find('input[name="salary_payable"]').val(salary_payable);
+        });
+        modal.on('hidden.bs.modal', function() {
+            $('#frm-cap-nhat').parsley().reset();
+
+        });
+    };
 </script>
 @endsection

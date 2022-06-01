@@ -20,7 +20,8 @@
                     data-parsley-required-message="Vui lòng nhập ngày kết thúc"
                     required>
                 </div>
-
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Ngày kí hợp đồng<span class="required"> *</span></label>
                     <input type="date" class="form-control" id="signing_date" name="signing_date"
@@ -38,6 +39,8 @@
                     data-parsley-maxlength-message="Họ tên người dùng không thể nhập quá 191 ký tự"
                     required>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Số lần gia hạn<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="renewal_number" name="renewal_number"
@@ -53,6 +56,8 @@
                     data-parsley-required-message="Vui lòng nhập ngày kí hợp đồng"
                     required>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Hệ số lương<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="salary_factor" name="salary_factor"
@@ -100,7 +105,7 @@
                 </div>
             </div>
             <div class="d-lg-flex justify-content-end">
-                <div class="row mt-3" >
+                <div class="row" >
                     <div class="col-md-6 mb-3">
                         <button id="btn-submit-form" type="button" class="btn btn-primary px-5">Lưu</button>
                     </div>
