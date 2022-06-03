@@ -52,11 +52,12 @@ class ContactController extends Controller
     {
         $user = User::all();
         $salary = Salary::all();
-
+        $code = 'HD'.Contract::max('id') + 1;
         $this->breadcrumb['page'] = 'Thêm mới';
         $data = [
             'users'         => $user,
             'salary'    =>$salary,
+            'code'   => $code,
         ];
         $this->title = 'Thêm mới';
         return $this->openView("modules.{$this->module}.create", $data);
@@ -70,30 +71,23 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(Carbon::parse($request->start_date)->format('d-m-Y'));
         $validator = Validator::make(
             $request->all(),
             [
                 'start_date' => 'required',
                 'finish_date' => 'required',
                 'signing_date' => 'required',
-                'renewal_date' => 'required',
                 'user_id' => 'required',
                 'content' => 'required',
-                'renewal_number' => 'required',
                 'salary_id' => 'required',
-                'salary_factor' => 'required',
-
             ],
             [
                 'start_date.required' => 'Bạn chưa chọn ngày bắt đầu',
                 'finish_date.required' => 'Bạn chưa chọn ngày kết thúc',
                 'signing_date.required' => 'Bạn chưa chọn ngày kí hợp đồng',
-                'renewal_date.required' => 'Bạn chưa chọn ngày gia hạn',
                 'content.required' => 'Bạn chưa nhập nội dung',
-                'renewal_number.required' => 'Bạn chưa nhập số lần gia hạn',
                 'salary_id.required' =>'Bạn chưa chọn loại lương',
-                'salary_factor.required' =>'Bạn chưa nhập hệ số lương',
+                'content.required' =>'Bạn chưa nhập nội dung',
             ]
         );
         if ($validator->fails()) {
@@ -103,18 +97,14 @@ class ContactController extends Controller
             ], 200);
         }
         $newContract = Contract::create([
-            'start_date' =>$request->start_date,
-            'finish_date' =>$request->finish_date,
-            'signing_date' =>$request->signing_date,
-            'renewal_date' =>$request->renewal_date,
-            'user_id' => $request->user_id,
-            'content' => $request->content,
-            'renewal_number' => $request->renewal_number,
-            'salary_id' => $request->salary_id,
-            'salary_factor' => $request->salary_factor,
-            'code'   =>null
+            'code'          =>  $request->code,
+            'start_date'    =>  $request->start_date,
+            'finish_date'   =>  $request->finish_date,
+            'signing_date'  =>  $request->signing_date,
+            'user_id'       =>  $request->user_id,
+            'content'       =>  $request->content,
+            'salary_id'     =>  $request->salary_id,
         ]);
-        $update = Contract::where('id' , $newContract->id)->update(['code' => "HD.$newContract->id"]);
         $route = "{$this->module}.list";
         return response()->json(
             [
@@ -173,23 +163,17 @@ class ContactController extends Controller
                 'start_date' => 'required',
                 'finish_date' => 'required',
                 'signing_date' => 'required',
-                'renewal_date' => 'required',
                 'user_id' => 'required',
                 'content' => 'required',
-                'renewal_number' => 'required',
                 'salary_id' => 'required',
-                'salary_factor' => 'required',
-
             ],
             [
                 'start_date.required' => 'Bạn chưa chọn ngày bắt đầu',
                 'finish_date.required' => 'Bạn chưa chọn ngày kết thúc',
                 'signing_date.required' => 'Bạn chưa chọn ngày kí hợp đồng',
-                'renewal_date.required' => 'Bạn chưa chọn ngày gia hạn',
                 'content.required' => 'Bạn chưa nhập nội dung',
-                'renewal_number.required' => 'Bạn chưa nhập số lần gia hạn',
                 'salary_id.required' =>'Bạn chưa chọn loại lương',
-                'salary_factor.required' =>'Bạn chưa nhập hệ số lương',
+                'content.required' =>'Bạn chưa nhập nội dung',
             ]
         );
         if ($validator->fails()) {
@@ -202,12 +186,9 @@ class ContactController extends Controller
         $update->start_date = $request->start_date;
         $update-> finish_date = $request->finish_date;
         $update-> signing_date = $request->signing_date;
-        $update-> renewal_date = $request->renewal_date;
         $update-> user_id = $request->user_id;
         $update-> content = $request->content;
-        $update-> renewal_number = $request->renewal_number;
         $update-> salary_id = $request->salary_id;
-        $update-> salary_factor = $request->salary_factor;
         $update->save();
         if (!empty($update)) {
             $route = "{$this->module}.list";

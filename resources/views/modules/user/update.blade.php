@@ -7,6 +7,10 @@
             <input name="id" type="hidden" value="{{$user->id}}">
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
+                    <label class="form-label" for="ten">Mã nhân viên</label>
+                    <input type="text" class="form-control" id="fullname" name="fullname" value="{{$user->code}}" readonly>
+                </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                 <label class="form-label" for="ten">Họ Tên<span class="required"> *</span></label>
                 <input type="text" class="form-control" id="fullname" name="fullname"
                 value="{{$user->fullname}}"
@@ -16,6 +20,8 @@
                 data-parsley-maxlength-message="Họ tên người dùng không thể nhập quá 191 ký tự"
                 required>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                     <label class="form-label" for="ten">Tên đăng nhập<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="username" name="username"
@@ -27,8 +33,6 @@
                     data-parsley-maxlength-message="Tên đăng nhập không thể nhập quá 191 ký tự"
                     required>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                     <label class="form-label" for="ten">Ngày sinh<span class="required"> *</span></label>
                     <input type="date" class="form-control" id="birthday" name="birthday"
@@ -36,6 +40,8 @@
                     data-parsley-required-message="Vui lòng nhập ngày sinh"
                     required>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                     <label class="form-label" for="dien-thoai">Số điện thoại<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="phone" name="phone"
@@ -45,8 +51,6 @@
                     data-parsley-required-message="Vui lòng nhập số điện thoại"
                     required>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                     <label class="form-label" for="dia-chi">Địa chỉ<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="address" name="address"
@@ -57,6 +61,8 @@
                     data-parsley-required-message="Vui lòng nhập địa chỉ"
                     required>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                     <label class="form-label" for="ten">CMND/CCCD<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="citizen_identification" name="citizen_identification"
@@ -67,8 +73,6 @@
                     data-parsley-maxlength-message="CCCD/CMND không thể nhập quá 191 ký tự"
                     required>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
                     <label class="form-label" for="ten">Email<span class="required"> *</span></label>
                     <input type="email" class="form-control" id="email" name="email"
@@ -81,6 +85,8 @@
                     data-parsley-maxlength-message="Email không thể nhập quá 191 ký tự"
                     required>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="mo-ta">Chức vụ<span class="required"> *</span></label>
                     <select class="form-select "
@@ -98,8 +104,6 @@
                     </select>
                     <div id="error-parley-select-cv"></div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="mo-ta">Phòng ban<span class="required"> *</span></label>
                     <select class="form-select "

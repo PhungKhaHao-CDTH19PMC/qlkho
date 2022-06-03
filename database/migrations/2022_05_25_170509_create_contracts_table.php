@@ -14,7 +14,6 @@ class CreateContractsTable extends Migration
     public function up()
     {
         Schema::create('contracts', function (Blueprint $table) {
-
             $table->id();
             $table->string('code')->nullable();
             $table->integer('user_id')->nullable();
@@ -22,9 +21,6 @@ class CreateContractsTable extends Migration
             $table->date('finish_date')->nullable();
             $table->date('signing_date')->nullable();
             $table->string('content')->nullable();
-            $table->string('renewal_number')->nullable();
-            $table->date('renewal_date')->nullable();
-            $table->integer('salary_factor')->nullable();
             $table->string('salary_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

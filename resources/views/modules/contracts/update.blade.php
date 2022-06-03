@@ -7,18 +7,26 @@
             <input type="hidden" id="id" name="id" value="{{$contract->id}}">
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày bắt đầu<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="start_date" name="start_date"
-                    value="{{$contract->start_date}}"
-                    data-parsley-required-message="Vui lòng nhập ngày bắt đầu"
-                    required>
+                    <label class="form-label" for="ten">Mã hợp đồng<span class="required"> *</span></label>
+                    <input type="text" class="form-control" id="code" name="code" value="{{$contract->code}}" readonly>
                 </div>
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày kết thúc<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="finish_date" name="finish_date"
-                    value="{{$contract->finish_date}}"
-                    data-parsley-required-message="Vui lòng nhập ngày kết thúc"
-                    required>
+                    <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
+                    <select class="form-select "
+                        data-parsley-required-message="Vui lòng chọn nhân viên"
+                        data-parsley-errors-container="#error-parley-select-nv"
+                        required
+                        id="user_id" name="user_id">
+                        <option value=""></option>
+                            @foreach($users as $user)
+                                @if($user->id==$contract->user_id)
+                                    <option value="{{ $user->id}} " selected>{{ $user->fullname }}</option>
+                                @else
+                                    <option value="{{ $user->id}} ">{{ $user->fullname}}</option>
+                                @endif
+                            @endforeach
+                    </select>
+                    <div id="error-parley-select-cv"></div>
                 </div>
             </div>
             <div class="row">
@@ -27,6 +35,22 @@
                     <input type="date" class="form-control" id="signing_date" name="signing_date"
                     value="{{$contract->signing_date}}"
                     data-parsley-required-message="Vui lòng nhập ngày kí hợp đồng"
+                    required>
+                </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Ngày bắt đầu<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="start_date" name="start_date"
+                    value="{{$contract->start_date}}"
+                    data-parsley-required-message="Vui lòng nhập ngày bắt đầu"
+                    required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Ngày kết thúc<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="finish_date" name="finish_date"
+                    value="{{$contract->finish_date}}"
+                    data-parsley-required-message="Vui lòng nhập ngày kết thúc"
                     required>
                 </div>
                 <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
@@ -42,30 +66,6 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Số lần gia hạn<span class="required"> *</span></label>
-                    <input type="text" class="form-control" id="renewal_number" name="renewal_number"
-                    value="{{$contract->renewal_number}}"
-                    placeholder="Nội dung"
-                    data-parsley-required-message="Vui lòng nhập nội dung"
-                    required>
-                </div>
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày gia hạn hợp đồng<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="renewal_date" name="renewal_date"
-                    value="{{$contract->renewal_date}}"
-                    data-parsley-required-message="Vui lòng nhập ngày kí hợp đồng"
-                    required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Hệ số lương<span class="required"> *</span></label>
-                    <input type="text" class="form-control" id="salary_factor" name="salary_factor"
-                    value="{{$contract->salary_factor}}"
-                    data-parsley-required-message="Vui lòng nhập hệ số lương"
-                    required>
-                </div>
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Loại lương<span class="required"> *</span></label>
                     <select class="form-select "
                         data-parsley-required-message="Vui lòng chọn loại lương"
@@ -78,26 +78,6 @@
                                     <option value="{{ $sa->id}} " selected>{{ $sa->name }}</option>
                                 @else
                                     <option value="{{ $sa->id}} ">{{ $sa->name}}</option>
-                                @endif
-                            @endforeach
-                    </select>
-                    <div id="error-parley-select-cv"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
-                    <select class="form-select "
-                        data-parsley-required-message="Vui lòng chọn nhân viên"
-                        data-parsley-errors-container="#error-parley-select-nv"
-                        required
-                        id="user_id" name="user_id">
-                        <option value=""></option>
-                            @foreach($users as $user)
-                                @if($user->id==$contract->user_id)
-                                    <option value="{{ $user->id}} " selected>{{ $user->fullname }}</option>
-                                @else
-                                    <option value="{{ $user->id}} ">{{ $user->fullname}}</option>
                                 @endif
                             @endforeach
                     </select>
@@ -143,14 +123,14 @@
         if($('#frm-cap-nhat').parsley().validate()) {
             var formData = new FormData();
                 $("input[name='id']").map(function(){ formData.append('id', this.value)}).get();
-                $("input[name='start_date']").map(function(){ formData.append('start_date', this.value)}).get();
-                $("input[name='finish_date']").map(function(){ formData.append('finish_date', this.value)}).get();
                 $("select[name='user_id']").map(function(){ formData.append('user_id', this.value)}).get();
                 $("input[name='signing_date']").map(function(){ formData.append('signing_date', this.value)}).get();
+                $("input[name='start_date']").map(function(){ formData.append('start_date', this.value)}).get();
+                $("input[name='finish_date']").map(function(){ formData.append('finish_date', this.value)}).get();
                 $("input[name='content']").map(function(){ formData.append('content', this.value)}).get();
-                $("input[name='renewal_number']").map(function(){ formData.append('renewal_number', this.value)}).get();
-                $("input[name='renewal_date']").map(function(){ formData.append('renewal_date', this.value)}).get();
-                $("input[name='salary_factor']").map(function(){ formData.append('salary_factor', this.value)}).get();
+                // $("input[name='renewal_number']").map(function(){ formData.append('renewal_number', this.value)}).get();
+                // $("input[name='renewal_date']").map(function(){ formData.append('renewal_date', this.value)}).get();
+                // $("input[name='salary_factor']").map(function(){ formData.append('salary_factor', this.value)}).get();
                 $("select[name='salary_id']").map(function(){ formData.append('salary_id', this.value)}).get();
 
                 $.ajax({
