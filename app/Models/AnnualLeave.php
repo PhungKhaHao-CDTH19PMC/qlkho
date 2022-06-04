@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Annual_leave extends Model
+class AnnualLeave extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'start_date',
         'finish_date',
@@ -32,4 +31,5 @@ class Annual_leave extends Model
 
         return $query;
     }
+
 }

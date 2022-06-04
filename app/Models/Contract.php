@@ -11,18 +11,17 @@ class Contract extends Model
     use HasFactory;
     protected $table = 'contracts';
     protected $fillable = [
-        'start_date',
-        'finish_date',
+        'code',
         'user_id',
         'signing_date',
+        'start_date',
+        'finish_date',
         'content',
-        'renewal_number',
-        'renewal_date',
-        'salary_factor',
         'salary_id',
-        'code'
-
     ];
+
+    protected $appends = ['count_renewal'];
+
     public function scopeQueryData($query, $req)
     {      
         if (!empty($req['user_id'])) {
@@ -38,8 +37,21 @@ class Contract extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function salary()
     {
         return $this->belongsTo(Salary::class);
     }
+
+    public function contractExtension()
+    {
+        return $this->hasMany('App\Models\ContractExtension');
+    }
+
+    public function getCountRenewalAttribute()
+    {
+        $count = $this->contractExtension()->count();
+        return $count;
+    }
+
 }

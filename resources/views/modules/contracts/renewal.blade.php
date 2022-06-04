@@ -2,37 +2,11 @@
 @section('page-content')
 <div class="card">
     <div class="card-body">
-            <div class="ms-auto">
-                <div class="row mb-3">
-                <div class="col-sm-12 col-md-3">
-                    <label class="form-label" for="mo-ta">Tên nhân viên</label>
-                    <select multiple="multiple" class="form-control" id="fullname" name="fullname" >
-                        @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->fullname }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-sm-12 col-md-9 mt-4">
-                    <div class="d-lg-flex justify-content-end">
-                        <a href="{{ route('contracts.create') }}" id="btn-them-moi" class="btn btn-primary mt-2 mt-lg-1">
-                            <i class="bx bxs-plus-square"></i>Thêm mới
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <div class="mb-3">
-                    <select id="select-chon-hang-loat" class="form-select">
-                        <option value=""></option>
-                        <option value="delete"> Xoá</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 mb-3">
-                <button id="btn-ap-dung" class="btn btn-outline-primary form-control " type="button" disabled>Áp dụng</button>
+        <div class="col-sm-12 col-md-12 mt-4">
+            <div class="d-lg-flex justify-content-end">
+                <a href="{{ route('contracts.renewal_create',['contract_id' => $id])}}" id="btn-them-moi" class="btn btn-primary mt-2 mt-lg-1">
+                    <i class="bx bxs-plus-square"></i>Thêm mới
+                </a>
             </div>
         </div>
         <div class="table-responsive">
@@ -43,10 +17,9 @@
                         <th>ID</th>
                         <th>Mã hợp đồng</th>
                         <th>Họ tên nhân viên</th>
-                        <th>Ngày bắt đầu </th>
-                        <th>Ngày kết thúc</th>
-                        <th>Ngày kí hợp đồng </th>
-                        <th>Số lần gia hạn </th>
+                        <th>Gia hạn từ</th>
+                        <th>Gia hạn đến</th>
+                        <th>Hệ số lương</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -60,49 +33,6 @@
 @endsection
 
 @section('page-js')
-<script type="text/javascript">
-    $("#fullname").multipleSelect({
-        placeholder: "Chọn tên nhân viên",
-        filter: true,
-        showClear: true,
-        //placeholder: 'Chọn mã hợp đồng',
-        position: 'bottom',
-        minimumCountSelected: 1,
-        filterPlaceholder: 'Tìm kiếm',
-        openOnHover: false,
-        formatSelectAll () {
-            return 'Chọn tất cả'
-        },
-        formatAllSelected () {
-            return 'Đã chọn tất cả'
-        },
-        formatCountSelected (count, total) {
-            return 'Đã chọn ' + count + ' trên ' + total
-        },
-        formatNoMatchesFound () {
-            return 'Không tìm thấy kết quả'
-        },
-        onClose: function () {
-            var filterFullname = JSON.stringify($("#fullname").val())
-            table.columns(2).search(filterFullname).draw();
-            $("#btn-ap-dung").attr('disabled', true);
-            $("th.select-checkbox").removeClass("selected");
-        },
-
-        onClear: function () {
-            var filterFullname = JSON.stringify($("#fullname").val())
-            table.columns(2).search(filterFullname).draw();
-            $("#btn-ap-dung").attr('disabled', true);
-            $("th.select-checkbox").removeClass("selected");
-        }
-    });
-    $("#select-chon-hang-loat").select2({
-       placeholder: "Chọn thao tác",
-       allowClear: true,
-       minimumResultsForSearch: -1
-    });
-</script>
-{{-- Load danh sách --}}
 <script>
     var table;
         resetTable()
@@ -131,8 +61,9 @@
                     }
                 },
                 ajax: {
-                    url: "{{route('contracts.load_ajax_list_contracts')}}",
-                    type: 'get'
+                    url: "{{route('contracts.load_ajax_list_renewal')}}",
+                    data: {contract_id: "{{$id}}"},
+                    type: "get"
                 },
                 select: {
                     style:    'multi',
@@ -189,12 +120,11 @@
                 columns: [
                     { data: null, defaultContent: '', bSortable: false },
                     { name: 'id', defaultContent: '',data: 'id',visible: false,bSortable: true},
-                    { name: 'code', defaultContent: '',data: 'code',bSortable: true},
+                    { name: 'code', defaultContent: '',data: 'contract.code',bSortable: true},
                     { name: 'user_id', defaultContent: '',data: 'user.fullname',bSortable: true},
-                    { name: 'start_date', defaultContent: '',data: 'start_date',bSortable: true},
-                    { name: 'finish_date', defaultContent: '',data: 'finish_date',bSortable: true},
-                    { name: 'signing_date', defaultContent: '',data: 'signing_date',bSortable: true},
-                    { name: 'renewal_number', defaultContent: '',data: 'count_renewal',bSortable: true},
+                    { name: 'renewal_date_start', defaultContent: '',data: 'renewal_date_start',bSortable: true},
+                    { name: 'renewal_date_finish', defaultContent: '',data: 'renewal_date_finish',bSortable: true},
+                    { name: 'salary_factor', defaultContent: '',data: 'salary_factor',bSortable: true},
                 ],
                 columnDefs: [
                     {
@@ -203,15 +133,14 @@
                         className: 'select-checkbox'
                     },
                     {
-                        targets:8,
+                        targets:7,
                         render: function(data,type, columns){
-                            var urlRenewal = "./hop-dong/gia-han/"+ columns.id;
-                            var urlUpdate = "./hop-dong/cap-nhat/"+ columns.id;
+                            var urlUpdate = "cap-nhat/"+ columns.id;
                             return '<div class="d-flex order-actions">'
-                                +'<a data-toggle="tooltip" data-placement="right" title="Gia hạn" href="'+ urlRenewal +'" class="btn-edit"><i class="bx bxs-edit"></i></a>'
                                 +'<a data-toggle="tooltip" data-placement="right" title="Cập nhật" href="'+ urlUpdate +'" class="btn-edit ms-3 "><i class="bx bxs-edit"></i></a>'
                                 +'<a data-toggle="tooltip" data-placement="right" title="Xoá" onclick="deleteRow(this)" data-id="'+columns.id+'" href="javascript:;" class="text-danger ms-3 btn-del"><i class="bx bxs-trash"></i></a>'
                                 +'</div>'
+                                ;
                         }
                     },
 
@@ -236,38 +165,38 @@
         }).then((result) => {
             if (result.value) {
 
-                        $.ajax({
-                                    url: "{{route('contracts.destroy')}}",
-                                    type: 'post',
-                                    data: {id:id},
-                        }).done(function(res) {
-                            if (res.status == 'success') {
-                                swal.fire({
-                                    title: res.message,
-                                    icon: 'success',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    position: 'center',
-                                    padding: '2em',
-                                    timer: 1500,
-                                })
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                Swal.fire({
-                                    title: res.message,
-                                    icon: 'error',
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    position: 'center',
-                                    padding: '2em',
-                                    timer: 1500,
-                                })
-                            }
-                        });
+                $.ajax({
+                            url: "{{route('contracts.renewal_destroy')}}",
+                            type: 'post',
+                            data: {id:id},
+                }).done(function(res) {
+                    if (res.status == 'success') {
+                        swal.fire({
+                            title: res.message,
+                            icon: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            position: 'center',
+                            padding: '2em',
+                            timer: 1500,
+                        })
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        Swal.fire({
+                            title: res.message,
+                            icon: 'error',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            position: 'center',
+                            padding: '2em',
+                            timer: 1500,
+                        })
                     }
-                })
+                });
+            }
+        })
     }
 </script>
 {{-- Xóa hàng loạt --}}
@@ -331,5 +260,10 @@
                 })
             }
         });
+</script>
+<script type="text/javascript">
+     function onGetPayEdit(contract_id, id) {
+        $('#form-edit-renewal-'+ id).submit();
+     }
 </script>
 @endsection

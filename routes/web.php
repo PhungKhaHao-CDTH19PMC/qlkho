@@ -8,9 +8,8 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AnnualLeaveController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\SalaryController
-;
-
+use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\ContractExtensionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,7 +104,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/xoa', [ContactController::class, 'destroy'])->name('destroy');
             Route::get('/cap-nhat/{id}', [ContactController::class, 'edit'])->name('edit');
             Route::post('/cap-nhat', [ContactController::class, 'update'])->name('update');
-            Route::get('/load-ajax-list-annual-leave', [ContactController::class, 'loadAjaxListContract'])->name('load_ajax_list_contracts');
+            Route::get('/load-ajax-list-contract', [ContactController::class, 'loadAjaxListContract'])->name('load_ajax_list_contracts');
+            Route::get('/gia-han/{id}', [ContractExtensionController::class, 'index'])->name('renewal');
+            Route::get('/load-ajax-list-renewal', [ContractExtensionController::class, 'loadAjaxListRenewal'])->name('load_ajax_list_renewal');
+            Route::get('//gia-han/them-moi/{contract_id}', [ContractExtensionController::class, 'create'])->name('renewal_create');
+            Route::post('/gia-han/them-moi', [ContractExtensionController::class, 'store'])->name('renewal_store');
+            Route::get('/gia-han/cap-nhat/{id}', [ContractExtensionController::class, 'edit'])->name('renewal_edit');
+            Route::post('/gia-han/cap-nhat', [ContractExtensionController::class, 'update'])->name('renewal_update');
+            Route::post('/gia-han/xoa', [ContractExtensionController::class, 'destroy'])->name('renewal_destroy');
         });
     });
 

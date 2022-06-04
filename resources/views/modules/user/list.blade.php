@@ -59,11 +59,12 @@
                     <tr>
                         <th style="width: 5%"></th>
                         <th>ID</th>
+                        <th>Mã nhân viên</th>
                         <th>Họ tên</th>
                         <th>Địa chỉ</th>
                         <th>Số điện thoại</th>
                         <th>Chức vụ</th>
-                        <th style="width: 20%" ></th>
+                        <th></th>
                     </tr>
                 </thead>
             </table>
@@ -102,9 +103,9 @@
             var filterFullname = JSON.stringify($("#fullname").val())
             var filterPhone = JSON.stringify($("#phone").val())
             var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            table.columns(3).search(filterFullname).draw();
+            table.columns(5).search(filterPhone).draw();
+            table.columns(6).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
 
@@ -149,9 +150,9 @@
             var filterFullname = JSON.stringify($("#fullname").val())
             var filterPhone = JSON.stringify($("#phone").val())
             var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            table.columns(3).search(filterFullname).draw();
+            table.columns(5).search(filterPhone).draw();
+            table.columns(6).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
 
@@ -218,9 +219,9 @@
             var filterFullname = JSON.stringify($("#fullname").val())
             var filterPhone = JSON.stringify($("#phone").val())
             var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            table.columns(3).search(filterFullname).draw();
+            table.columns(5).search(filterPhone).draw();
+            table.columns(6).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
 
@@ -265,9 +266,9 @@
             var filterFullname = JSON.stringify($("#fullname").val())
             var filterPhone = JSON.stringify($("#phone").val())
             var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            table.columns(3).search(filterFullname).draw();
+            table.columns(5).search(filterPhone).draw();
+            table.columns(6).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
 
@@ -334,9 +335,9 @@
             var filterFullname = JSON.stringify($("#fullname").val())
             var filterPhone = JSON.stringify($("#phone").val())
             var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            table.columns(3).search(filterFullname).draw();
+            table.columns(5).search(filterPhone).draw();
+            table.columns(6).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
 
@@ -381,9 +382,9 @@
             var filterFullname = JSON.stringify($("#fullname").val())
             var filterPhone = JSON.stringify($("#phone").val())
             var filterRole = JSON.stringify($("#role_id").val())
-            table.columns(2).search(filterFullname).draw();
-            table.columns(4).search(filterPhone).draw();
-            table.columns(5).search(filterRole).draw();
+            table.columns(3).search(filterFullname).draw();
+            table.columns(5).search(filterPhone).draw();
+            table.columns(6).search(filterRole).draw();
             $("#btn-ap-dung").attr('disabled', true);
             $("th.select-checkbox").removeClass("selected");
 
@@ -518,6 +519,7 @@
                 columns: [
                     { data: null, defaultContent: '', bSortable: false },
                     { name: 'id', defaultContent: '',data: 'id',visible: false,bSortable: true},
+                    { name: 'code', defaultContent: '',data: 'code',bSortable: true},
                     { name: 'fullname', defaultContent: '',data: 'fullname',bSortable: true},
                     { name: 'address', defaultContent: '',data: 'address',bSortable: true},
                     { name: 'phone', defaultContent: '',data: 'phone',bSortable: true},
@@ -531,7 +533,7 @@
                         className: 'select-checkbox'
                     },
                     {
-                        targets: 6,
+                        targets: 7,
                         render: function(data,type, columns){
                              var url = "./nguoi-dung/cap-nhat/"+ columns.id;
                             return '<div class="d-flex order-actions">'
@@ -543,7 +545,7 @@
 
                 ],
                 ordering: true,
-                order: [[ 1, 'asc' ]],
+                order: [[ 2, 'asc' ]],
 
             });
         }

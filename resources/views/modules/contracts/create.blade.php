@@ -6,50 +6,9 @@
             @csrf
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày bắt đầu<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="start_date" name="start_date"
-                    data-parsley-required-message="Vui lòng nhập ngày bắt đầu"
-                    required>
+                    <label class="form-label" for="ten">Mã hợp đồng<span class="required"> *</span></label>
+                    <input type="text" class="form-control" id="code" name="code" value="{{$code}}" readonly>
                 </div>
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày kết thúc<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="finish_date" name="finish_date"
-                    data-parsley-required-message="Vui lòng nhập ngày kết thúc"
-                    required>
-                    <!-- <div id="error-parley-select-fd" 
-                        style="color: #e7515a;
-                        font-size: 13px;
-                        font-weight: 700;
-                        letter-spacing: 1px;
-                        margin: 0.5rem 0 0 0 !important;
-                        list-style: none;"
-                    ></div> -->
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày kí hợp đồng<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="signing_date" name="signing_date"
-                    data-parsley-required-message="Vui lòng nhập ngày kí hợp đồng"
-                    required>
-                </div>
-                <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
-                    <label class="form-label" for="ten">Nội dung<span class="required"> *</span></label>
-                    <input type="text" class="form-control" id="content" name="content"
-                    placeholder="Nội dung"
-                    data-parsley-required-message="Vui lòng nhập nội dung"
-                    data-parsley-maxlength="191"
-                    data-parsley-maxlength-message="Họ tên người dùng không thể nhập quá 191 ký tự"
-                    required>
-                </div>
-            </div>
-            <div class="row">
-                <!-- <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Số lần gia hạn<span class="required"> *</span></label>
-                    <input type="text" class="form-control" id="renewal_number" name="renewal_number"
-                    placeholder="Số lần gia hạn"
-                    readonly>
-                </div> -->
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
                     <select class="form-select "
@@ -64,20 +23,39 @@
                     </select>
                     <div id="error-parley-select-cv"></div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Ngày gia hạn hợp đồng<span class="required"> *</span></label>
-                    <input type="date" class="form-control" id="renewal_date" name="renewal_date"
+                    <label class="form-label" for="ten">Ngày kí hợp đồng<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="signing_date" name="signing_date"
                     data-parsley-required-message="Vui lòng nhập ngày kí hợp đồng"
+                    required>
+                </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Ngày bắt đầu<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="start_date" name="start_date"
+                    data-parsley-required-message="Vui lòng nhập ngày bắt đầu"
                     required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Hệ số lương<span class="required"> *</span></label>
-                    <input type="text" class="form-control" id="salary_factor" name="salary_factor"
-                    data-parsley-required-message="Vui lòng nhập hệ số lương"
+                    <label class="form-label" for="ten">Ngày kết thúc<span class="required"> *</span></label>
+                    <input type="date" class="form-control" id="finish_date" name="finish_date"
+                    data-parsley-required-message="Vui lòng nhập ngày kết thúc"
                     required>
                 </div>
+                <div class="col-md-6 col-sm-12" style="margin-bottom:1%">
+                    <label class="form-label" for="ten">Nội dung<span class="required"> *</span></label>
+                    <input type="text" class="form-control" id="content" name="content"
+                    placeholder="Nội dung"
+                    data-parsley-required-message="Vui lòng nhập nội dung"
+                    data-parsley-maxlength="191"
+                    data-parsley-maxlength-message="Họ tên người dùng không thể nhập quá 191 ký tự"
+                    required>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Loại lương<span class="required"> *</span></label>
                     <select class="form-select "
@@ -92,10 +70,7 @@
                     </select>
                     <div id="error-parley-select-cv"></div>
                 </div>
-            </div>
-            <div class="row">
-               
-            </div>
+            <div>
             <div class="d-lg-flex justify-content-end">
                 <div class="row" >
                     <div class="col-md-6 mb-3">
@@ -134,15 +109,16 @@
     $('#btn-submit-form').click(function() {
         if($('#frm-them-moi').parsley().validate()) {
             var formData = new FormData();
-                $("input[name='start_date']").map(function(){ formData.append('start_date', this.value)}).get();
-                $("input[name='finish_date']").map(function(){ formData.append('finish_date', this.value)}).get();
+                $("input[name='code']").map(function(){ formData.append('code', this.value)}).get();
                 $("select[name='user_id']").map(function(){ formData.append('user_id', this.value)}).get();
                 $("input[name='signing_date']").map(function(){ formData.append('signing_date', this.value)}).get();
+                $("input[name='start_date']").map(function(){ formData.append('start_date', this.value)}).get();
+                $("input[name='finish_date']").map(function(){ formData.append('finish_date', this.value)}).get();
                 $("input[name='content']").map(function(){ formData.append('content', this.value)}).get();
-                $("select[name='renewal_number']").map(function(){ formData.append('renewal_number', this.value)}).get();
-                $("input[name='renewal_number']").map(function(){ formData.append('renewal_number', this.value)}).get();
-                $("input[name='renewal_date']").map(function(){ formData.append('renewal_date', this.value)}).get();
-                $("input[name='salary_factor']").map(function(){ formData.append('salary_factor', this.value)}).get();
+                // $("select[name='renewal_number']").map(function(){ formData.append('renewal_number', this.value)}).get();
+                // $("input[name='renewal_number']").map(function(){ formData.append('renewal_number', this.value)}).get();
+                // $("input[name='renewal_date']").map(function(){ formData.append('renewal_date', this.value)}).get();
+                // $("input[name='salary_factor']").map(function(){ formData.append('salary_factor', this.value)}).get();
                 $("select[name='salary_id']").map(function(){ formData.append('salary_id', this.value)}).get();
 
                 $.ajax({

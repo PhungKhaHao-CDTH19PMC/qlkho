@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Annual_leave;
+use App\Models\AnnualLeave;
 use Illuminate\Support\Facades\Validator;
 
 class AnnualLeaveController extends Controller
@@ -28,7 +28,7 @@ class AnnualLeaveController extends Controller
     public function index()
     {
         $user = User::all();
-        $annual_leaves  = Annual_leave::all();
+        $annual_leaves  = AnnualLeave::all();
         $this->breadcrumb['page'] = 'Danh sách';
         $data = [
             'users'      => $user,
@@ -81,7 +81,7 @@ class AnnualLeaveController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        Annual_leave::create(
+        AnnualLeave::create(
             [
                 'start_date'    => $request->start_date,
                 'finish_date'   => $request->finish_date,
@@ -120,7 +120,7 @@ class AnnualLeaveController extends Controller
     public function edit($id)
     {
         $user = User::all();
-        $annual_leave = Annual_leave::find($id);
+        $annual_leave = AnnualLeave::find($id);
         $this->breadcrumb['page'] = 'Cập nhật';
         $data = [
             'users'         => $user,
@@ -158,7 +158,7 @@ class AnnualLeaveController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        $annual_leave = Annual_leave::find($request->id);
+        $annual_leave = AnnualLeave::find($request->id);
         if (!empty($annual_leave)) {
             $annual_leave->start_date = $request->start_date;
             $annual_leave->finish_date = $request->finish_date;
@@ -186,7 +186,7 @@ class AnnualLeaveController extends Controller
     public function destroy(Request $request)
     {
         try {
-            Annual_leave::destroy($request->id);
+            AnnualLeave::destroy($request->id);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đã xoá dữ liệu',
@@ -227,9 +227,9 @@ class AnnualLeaveController extends Controller
         $filter['search'] =  $searchValue;
         $filter = $this->customFilterAjax($filter, $columnName_arr);
         // Total records
-        $totalRecords  = Annual_leave::count();
-        $totalRecordswithFilter = Annual_leave::queryData($filter)->distinct()->count();
-        $annual_leave = Annual_leave::select(['annual_leaves.*'])
+        $totalRecords  = AnnualLeave::count();
+        $totalRecordswithFilter = AnnualLeave::queryData($filter)->distinct()->count();
+        $annual_leave = AnnualLeave::select(['annual_leaves.*'])
             ->leftjoin('users', 'users.id', '=', 'annual_leaves.user_id')
             ->with(['user'])
             ->queryData($filter)

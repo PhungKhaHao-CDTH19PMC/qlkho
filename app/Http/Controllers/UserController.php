@@ -53,12 +53,14 @@ class UserController extends Controller
      */
     public function create()
     {
+        $code = 'NV'.User::max('id') + 1;
         $role = Role::all();
         $department = Department::all();
         $this->breadcrumb['page'] = 'Thêm mới';
         $data = [
             'roles'         => $role,
             'departments'   => $department,
+            'code'   => $code,
         ];
         $this->title = 'Thêm mới';
         return $this->openView("modules.{$this->module}.create", $data);
@@ -110,6 +112,7 @@ class UserController extends Controller
         }
        $user = User::create(
             [
+                'code'                      => $request->code,
                 'fullname'                  => $request->fullname,
                 'username'                  => $request->username,
                 'password'                  => Hash::make($request->password),
