@@ -80,7 +80,7 @@ class ContactController extends Controller
                 'renewal_date' => 'required',
                 'user_id' => 'required',
                 'content' => 'required',
-                'renewal_number' => 'required',
+                // 'renewal_number' => 'required',
                 'salary_id' => 'required',
                 'salary_factor' => 'required',
 
@@ -109,7 +109,7 @@ class ContactController extends Controller
             'renewal_date' =>$request->renewal_date,
             'user_id' => $request->user_id,
             'content' => $request->content,
-            'renewal_number' => $request->renewal_number,
+            'renewal_number' => 0,
             'salary_id' => $request->salary_id,
             'salary_factor' => $request->salary_factor,
             'code'   =>null
@@ -176,7 +176,7 @@ class ContactController extends Controller
                 'renewal_date' => 'required',
                 'user_id' => 'required',
                 'content' => 'required',
-                'renewal_number' => 'required',
+                // 'renewal_number' => 'required',
                 'salary_id' => 'required',
                 'salary_factor' => 'required',
 
@@ -199,13 +199,16 @@ class ContactController extends Controller
             ], 200);
         }
         $update = Contract::find($request->id);
+        if($update->renewal_date != $request->renewal_date )
+        {
+            $update->renewal_number = $request->renewal_number+1;
+        }
         $update->start_date = $request->start_date;
         $update-> finish_date = $request->finish_date;
         $update-> signing_date = $request->signing_date;
         $update-> renewal_date = $request->renewal_date;
         $update-> user_id = $request->user_id;
         $update-> content = $request->content;
-        $update-> renewal_number = $request->renewal_number;
         $update-> salary_id = $request->salary_id;
         $update-> salary_factor = $request->salary_factor;
         $update->save();

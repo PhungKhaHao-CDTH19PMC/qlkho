@@ -44,12 +44,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                <!-- <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Số lần gia hạn<span class="required"> *</span></label>
                     <input type="text" class="form-control" id="renewal_number" name="renewal_number"
-                    placeholder="Nội dung"
-                    data-parsley-required-message="Vui lòng nhập nội dung"
-                    required>
+                    placeholder="Số lần gia hạn"
+                    readonly>
+                </div> -->
+                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
+                    <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
+                    <select class="form-select "
+                        data-parsley-required-message="Vui lòng chọn nhân viên"
+                        data-parsley-errors-container="#error-parley-select-nv"
+                        required
+                        id="user_id" name="user_id">
+                        <option value=""></option>
+                        @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->fullname }}</option>
+                        @endforeach
+                    </select>
+                    <div id="error-parley-select-cv"></div>
                 </div>
                 <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
                     <label class="form-label" for="ten">Ngày gia hạn hợp đồng<span class="required"> *</span></label>
@@ -81,20 +94,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-sm-12" style="margin-bottom:2%">
-                    <label class="form-label" for="ten">Tên nhân viên<span class="required"> *</span></label>
-                    <select class="form-select "
-                        data-parsley-required-message="Vui lòng chọn nhân viên"
-                        data-parsley-errors-container="#error-parley-select-nv"
-                        required
-                        id="user_id" name="user_id">
-                        <option value=""></option>
-                        @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->fullname }}</option>
-                        @endforeach
-                    </select>
-                    <div id="error-parley-select-cv"></div>
-                </div>
+               
             </div>
             <div class="d-lg-flex justify-content-end">
                 <div class="row" >
