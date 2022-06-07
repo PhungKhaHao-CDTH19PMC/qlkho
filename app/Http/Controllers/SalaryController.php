@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Salary;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Contract;
 
 class SalaryController extends Controller
 {
@@ -98,10 +99,12 @@ class SalaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
-    }
+        $contract = Contract::where("user_id",$request->id)->first();
+        $salary = Salary::find($contract->salary_id);
+        return response()->json($salary);
+       }
 
     /**
      * Show the form for editing the specified resource.
@@ -239,4 +242,5 @@ class SalaryController extends Controller
         echo json_encode($response);
         exit;
     }
+    
 }

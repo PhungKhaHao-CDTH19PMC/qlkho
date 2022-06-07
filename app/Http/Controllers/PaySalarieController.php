@@ -3,23 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Contract;
+use App\Models\Salary;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Models\Salary;
-
+use App\Models\PaySalary;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Contract;
 
-class ContactController extends Controller
+class PaySalarieController extends Controller
 {
     public function __construct()
     {
-        $this->module = 'contracts';
+        $this->module = 'pay_salaries';
         $this->breadcrumb = [
-            'object'    => 'Hợp đồng',
+            'object'    => 'Bảng lương',
             'page'      => ''
         ];
-        $this->title = 'Hợp đồng';
+        $this->title = 'Bảng lương';
     }
     /**
      * Display a listing of the resource.
@@ -29,17 +29,19 @@ class ContactController extends Controller
     public function index()
     {
         $user = User::all();
-
-        $Contract = Contract::all();
+        // $monthNow =substr(Carbon::now()->format('d-m-Y H:i:s'),4,7);
+        $paySalary = PaySalary::all();
+        $datePaySalary = PaySalary::where('id','>',0)->selectRaw("substring(month,4,7)")->distinct()->get();
         $salary = Salary::all();
 
         $this->breadcrumb['page'] = 'Danh sách';
         $data = [
-            'contract' => $Contract,
+            'paySalary' => $paySalary,
             'users'      => $user,
-            'salary'    =>$salary
+            'salary'    => $salary,
+            'monthPaySalarys' => $datePaySalary
         ];
-        // dd($data);
+        // dd($paySalary ); 
         return $this->openView("modules.{$this->module}.list", $data);
     }
 
@@ -52,12 +54,10 @@ class ContactController extends Controller
     {
         $user = User::all();
         $salary = Salary::all();
-        $code = 'HD'.Contract::max('id') + 1;
         $this->breadcrumb['page'] = 'Thêm mới';
         $data = [
             'users'         => $user,
-            'salary'    =>$salary,
-            'code'   => $code,
+            'salarys'    =>$salary,
         ];
         $this->title = 'Thêm mới';
         return $this->openView("modules.{$this->module}.create", $data);
@@ -71,25 +71,28 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
-                'start_date' => 'required',
-                'finish_date' => 'required',
-                'signing_date' => 'required',
-                'user_id' =>  'required|unique:App\Models\Contract,user_id,NULL,id,deleted_at,NULL',
-                'content' => 'required',
-                // 'renewal_number' => 'required',
-                'salary_id' => 'required',
+                'working_day' => 'required',
+                'salary' => 'required',
+                'allowance' => 'required',
+                'user_id' =>  'required',
+                'total' => 'required',
+                'advance' => 'required',
+                'actual_salary' => 'required',
+                'status' => 'required',
             ],
             [
-                'user_id.unique' =>'Nhân viên này đã có hợp đồng rồi bạn không thể tạo thêm',
-                'start_date.required' => 'Bạn chưa chọn ngày bắt đầu',
-                'finish_date.required' => 'Bạn chưa chọn ngày kết thúc',
-                'signing_date.required' => 'Bạn chưa chọn ngày kí hợp đồng',
-                'content.required' => 'Bạn chưa nhập nội dung',
-                'salary_id.required' =>'Bạn chưa chọn loại lương',
-                'content.required' =>'Bạn chưa nhập nội dung',
+                'working_day.required' => 'Bạn chưa nhập số ngày công',
+                'salary.required' => 'Bạn chưa nhập lương',
+                'allowance.required' => 'Bạn chưa nhập trợ cấp',
+                'user_id.required' => 'Bạn chưa chọn nhân viên',
+                'total.required' =>'Bạn chưa có tổng lương',
+                'advance.required' =>'Bạn chưa nhập ứng lương',
+                'actual_salary.required' =>'Bạn chưa nhập lương thực tế',
+                'status.required' =>'Bạn chưa chọn trạng thái',
             ]
         );
         if ($validator->fails()) {
@@ -98,15 +101,30 @@ class ContactController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        $newContract = Contract::create([
-            'code'          =>  $request->code,
-            'start_date'    =>  $request->start_date,
-            'finish_date'   =>  $request->finish_date,
-            'signing_date'  =>  $request->signing_date,
+        $monthNow =substr(Carbon::now()->format('d-m-Y H:i:s'),4,7);
+        $checkPaySalary = PaySalary::where('user_id',$request->user_id)->where('month','LIKE',"%$monthNow%")->count();
+        if($checkPaySalary>0)
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Nhân viên này đã được tính lương tại tháng hiện tại!',
+            ], 200);
+        }
+        $Contract = Contract::where('user_id',$request->user_id)->first();
+// dd(Carbon::now()->format('d-m-Y H:i:s'));
+        $newPaySalary = PaySalary::create([
+            'salary_id'     =>  $Contract->salary_id,
             'user_id'       =>  $request->user_id,
-            'content'       =>  $request->content,
-            'salary_id'     =>  $request->salary_id,
+            'working_day'   =>  $request->working_day,
+            'salary'        =>  $request->salary,
+            'allowance'     =>  $request->allowance,
+            'total'         =>  $request->total,
+            'advance'       =>  $request->advance,
+            'actual_salary' =>  $request->actual_salary,
+            'month'         =>  Carbon::now()->format('d-m-Y H:i:s'),
+            'status'        =>  $request->status,
         ]);
+// dd( $newPaySalary);
         $route = "{$this->module}.list";
         return response()->json(
             [
@@ -137,12 +155,14 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        $user = User::all();
-        $contract = Contract::find($id);
-        $salary = Salary::all();
+        $PaySalary = PaySalary::find($id);
+        // dd($PaySalary);
+        $user = User::where('id',$PaySalary->user_id)->first();
+        $Contract = Contract::where('user_id',$PaySalary->user_id)->first();
+        $salary = Salary::find(  $Contract->salary_id);
         $data = [
-            'users'         => $user,
-            'contract'  => $contract,
+            'user'         => $user,
+            'PaySalary'  => $PaySalary,
             'salary'    =>$salary,
         ];
         $this->title = 'Cập nhật';
@@ -162,22 +182,24 @@ class ContactController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'start_date' => 'required',
-                'finish_date' => 'required',
-                'signing_date' => 'required',
-                'user_id' =>  "required|unique:App\Models\Contract,user_id,{$request->id},id,deleted_at,NULL",
-                'content' => 'required',
-                // 'renewal_number' => 'required',
-                'salary_id' => 'required',
+                'working_day' => 'required',
+                'salary' => 'required',
+                'allowance' => 'required',
+                'user_id' => 'required',
+                'total' => 'required',
+                'advance' => 'required',
+                'actual_salary' => 'required',
+                'status' => 'required',
             ],
             [
-                'user_id.unique' =>'Nhân viên này đã có hợp đồng rồi bạn không thể tạo thêm',
-                'start_date.required' => 'Bạn chưa chọn ngày bắt đầu',
-                'finish_date.required' => 'Bạn chưa chọn ngày kết thúc',
-                'signing_date.required' => 'Bạn chưa chọn ngày kí hợp đồng',
-                'content.required' => 'Bạn chưa nhập nội dung',
-                'salary_id.required' =>'Bạn chưa chọn loại lương',
-                'content.required' =>'Bạn chưa nhập nội dung',
+                'working_day.required' => 'Bạn chưa nhập số ngày công',
+                'salary.required' => 'Bạn chưa nhập lương',
+                'allowance.required' => 'Bạn chưa nhập trợ cấp',
+                'user_id.required' => 'Bạn chưa chọn nhân viên',
+                'total.required' =>'Bạn chưa có tổng lương',
+                'advance.required' =>'Bạn chưa nhập ứng lương',
+                'actual_salary.required' =>'Bạn chưa nhập lương thực tế',
+                'status.required' =>'Bạn chưa chọn trạng thái',
             ]
         );
         if ($validator->fails()) {
@@ -186,18 +208,23 @@ class ContactController extends Controller
                 'message' => $validator->messages()->first(),
             ], 200);
         }
-        $update = Contract::find($request->id);
-        if($update->renewal_date != $request->renewal_date )
-        {
-            $update->renewal_number = $request->renewal_number+1;
-        }
-        $update->start_date = $request->start_date;
-        $update-> finish_date = $request->finish_date;
-        $update-> signing_date = $request->signing_date;
+
+        $Contract = Contract::where('user_id',$request->user_id)->first();
+        $update = PaySalary::find($request->id);
+        
+        $update-> salary_id = $Contract->salary_id;
+        $update->working_day = $request->working_day;
+        $update-> salary = $request->salary;
+        $update-> allowance = $request->allowance;
         $update-> user_id = $request->user_id;
-        $update-> content = $request->content;
-        $update-> salary_id = $request->salary_id;
+        $update-> total = $request->total;
+        $update-> advance = $request->advance;
+        $update-> actual_salary = $request->actual_salary;
+        $update->month  = Carbon::now()->format('d-m-Y H:i:s');
+
+        $update-> status = $request->status;
         $update->save();
+
         if (!empty($update)) {
             $route = "{$this->module}.list";
             return response()->json(
@@ -225,7 +252,7 @@ class ContactController extends Controller
     public function destroy(Request $request)
     {
         try {
-            Contract::destroy($request->id);
+            PaySalary::destroy($request->id);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đã xoá dữ liệu',
@@ -250,7 +277,7 @@ class ContactController extends Controller
 
         return $filter;
     }
-    public function loadAjaxListContract(Request $request)
+    public function loadAjaxListPaySalaries(Request $request)
     {
         $draw            = $request->get('draw');
         $start           = $request->get("start");
@@ -266,22 +293,23 @@ class ContactController extends Controller
         $filter['name'] =  $searchValue;
         $filter = $this->customFilterAjax($filter, $columnName_arr);
         // Total records
-        $totalRecords  = Contract::count();
-        $totalRecordswithFilter = Contract::queryData($filter)->distinct()->count();
-        $Contract = Contract::select(['Contracts.*'])
+        $totalRecords  = PaySalary::count();
+        $totalRecordswithFilter = PaySalary::queryData($filter)->distinct()->count();
+        $PaySalary = PaySalary::select(['pay_salaries.*'])
         ->with(['user'])
-        ->with(['salary'])
+        ->with(['salarys'])
         ->QueryData($filter)
         ->orderBy($columnName, $columnSortOrder)->distinct()->skip($start)->take($rowperpage)->get();
-
+        // dd($filter);
         $response = [
             "draw"                 => intval($draw),
             "iTotalRecords"        => $totalRecords,
             "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData"               => $Contract,
+            "aaData"               => $PaySalary,
             "filter"               => $filter,
         ];
         echo json_encode($response);
         exit;
     }
+
 }

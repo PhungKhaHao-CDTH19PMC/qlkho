@@ -10,6 +10,7 @@ use App\Http\Controllers\AnnualLeaveController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\ContractExtensionController;
+use App\Http\Controllers\PaySalarieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +125,20 @@ Route::middleware('auth')->group(function () {
             Route::get('/cap-nhat/{id}', [SalaryController::class, 'edit'])->name('edit');
             Route::post('/cap-nhat', [SalaryController::class, 'update'])->name('update');
             Route::get('/load-ajax-list-annual-leave', [SalaryController::class, 'loadAjaxListSalary'])->name('load_ajax_list_salary');
+            Route::post('/show', [SalaryController::class, 'show'])->name('show');
+
+        });
+    });
+    Route::prefix('bang-luong')->group(function () {
+        Route::name('pay_salaries.')->group(function () {
+            Route::get('/', [PaySalarieController::class, 'index'])->name('list');
+            Route::get('/them-moi', [PaySalarieController::class, 'create'])->name('create');
+            Route::post('/them-moi', [PaySalarieController::class, 'store'])->name('store');
+            Route::post('/xoa', [PaySalarieController::class, 'destroy'])->name('destroy');
+            Route::get('/cap-nhat/{id}', [PaySalarieController::class, 'edit'])->name('edit');
+            Route::post('/cap-nhat', [PaySalarieController::class, 'update'])->name('update');
+            Route::get('/load-ajax-list-annual-leave', [PaySalarieController::class, 'loadAjaxListPaySalaries'])->name('load_ajax_list_pay_salaries');
+
         });
     });
 });
