@@ -42,6 +42,12 @@ $menuItems = [
         'module'    => 'salary',
         'link'      => 'salary.list'
     ],
+    [
+        'title'     => 'Bảng lương',
+        'icon'      => 'bx-home-circle',
+        'module'    => 'pay_salaries',
+        'link'      => 'pay_salaries.list'
+    ],
 ];
 @endphp
 <ul class="metismenu" id="menu">
