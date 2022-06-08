@@ -28,7 +28,6 @@ class PaySalary extends Model
         if (!empty($req['user_id'])) {
             $arr_user = json_decode($req['user_id']);
             if (is_array($arr_user) && !empty($arr_user)) {
-                // dd($arr_user);
                 foreach($arr_user as $arr)
                 {
                     $query->orwhere('month','LIKE', "%$arr%"); 
@@ -37,7 +36,6 @@ class PaySalary extends Model
         };
         if(empty($req['user_id'])||$req['user_id']=="[]")
         {
-            // dd($req['user_id']);
             $monthNow =substr(Carbon::now()->format('d-m-Y H:i:s'),4,7);
             $query->where('month','LIKE',"%$monthNow%")->get();
         }

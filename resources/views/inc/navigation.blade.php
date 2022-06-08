@@ -48,6 +48,12 @@ $menuItems = [
         'module'    => 'pay_salaries',
         'link'      => 'pay_salaries.list'
     ],
+    [
+        'title'     => 'Chấm công',
+        'icon'      => 'bx-home-circle',
+        'module'    => 'Timesheet',
+        'link'      => 'Timesheet.list'
+    ],
 ];
 @endphp
 <ul class="metismenu" id="menu">
