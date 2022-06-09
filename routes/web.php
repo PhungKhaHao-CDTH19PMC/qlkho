@@ -11,6 +11,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\ContractExtensionController;
 use App\Http\Controllers\PaySalarieController;
+use App\Http\Controllers\TimesheetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,6 +139,19 @@ Route::middleware('auth')->group(function () {
             Route::get('/cap-nhat/{id}', [PaySalarieController::class, 'edit'])->name('edit');
             Route::post('/cap-nhat', [PaySalarieController::class, 'update'])->name('update');
             Route::get('/load-ajax-list-annual-leave', [PaySalarieController::class, 'loadAjaxListPaySalaries'])->name('load_ajax_list_pay_salaries');
+
+        });
+    });
+
+    Route::prefix('cham-cong')->group(function () {
+        Route::name('Timesheet.')->group(function () {
+            Route::get('/', [TimesheetController::class, 'index'])->name('list');
+            Route::get('/them-moi', [TimesheetController::class, 'create'])->name('create');
+            Route::post('/them-moi', [TimesheetController::class, 'store'])->name('store');
+            Route::post('/xoa', [TimesheetController::class, 'destroy'])->name('destroy');
+            Route::get('/cap-nhat/{id}', [TimesheetController::class, 'edit'])->name('edit');
+            Route::post('/cap-nhat', [TimesheetController::class, 'update'])->name('update');
+            Route::get('/load-ajax-list-annual-leave', [TimesheetController::class, 'loadAjaxListTimesheet'])->name('load_ajax_list_Timesheet');
 
         });
     });
